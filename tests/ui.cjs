@@ -21,7 +21,8 @@ async function open(name,options={}) {
    googleLogin:async()=>({ready:true,user:{uid:'google-user'},profile:{role:'advisor',status:'active'}}),
    resetPassword:async email=>calls.push({action:'reset',email}),
    register:async values=>{calls.push({action:'register',values});if(options.registerError)throw {code:options.registerError};},
-   listUsers:()=>usersResult,updateUser:async(id,patch)=>{calls.push({action:'updateUser',id,patch});}
+   listUsers:()=>usersResult,updateUser:async(id,patch)=>{calls.push({action:'updateUser',id,patch});},
+   logout:async()=>{calls.push({action:'logout'});if(options.logoutError)throw {code:options.logoutError};state={ready:true,user:null,profile:null};dom.window.dispatchEvent(new dom.window.Event('summa:auth'));}
  };
  for(const script of dom.window.document.querySelectorAll('script[src]')) {
    if(script.getAttribute('src')==='assets/services/firebase.bundle.js')continue;
@@ -57,6 +58,9 @@ function confirm(dom,accept){const target=dom.window.document.querySelector(`[da
  dom=await open('projects');field(dom,'#pt-q','CS-04');assert.match(text(dom),/พบ 1 โครงงาน/);field(dom,'#pt-q','zzzzz');assert.match(text(dom),/ไม่พบโครงงานตามเงื่อนไข/);dom.window.close();
  dom=await open('login');assert.equal(dom.window.document.querySelectorAll('nav,.site-header').length,0);assert.equal(dom.window.document.querySelector('#email').placeholder,'admin@summa.ac.th');button(dom,'เข้าสู่ระบบ');await tick();assert.match(text(dom),/กรอกอีเมลและรหัสผ่านให้ครบ/);assert.equal(dom.calls.length,0);field(dom,'#email','actual-admin@example.test');field(dom,'#pw','test-password');button(dom,'เข้าสู่ระบบ');await tick();assert.equal(dom.calls[0].email,'actual-admin@example.test');assert.deepEqual(dom.destinations,['users.html']);assert.equal(dom.window.sessionStorage.length,0);dom.window.close();
  dom=await open('login',{loginError:'summa/pending'});field(dom,'#email','pending@example.test');field(dom,'#pw','test-password');button(dom,'เข้าสู่ระบบ');await tick();assert.match(text(dom),/รอการอนุมัติ/);assert.deepEqual(dom.destinations,[]);dom.window.close();
+ dom=await open('login',{role:'admin'});button(dom,'เข้าใช้งานในโหมดผู้เยี่ยมชม');await tick();assert.equal(dom.window.SummaAuth.state.user,null);assert.deepEqual(dom.destinations,['index.html']);assert.deepEqual(JSON.parse(JSON.stringify(dom.calls)),[{action:'logout'}]);dom.window.close();
+ dom=await open('login');delete dom.window.SummaAuth;button(dom,'เข้าใช้งานในโหมดผู้เยี่ยมชม');await tick();assert.deepEqual(dom.destinations,['index.html']);assert.equal(dom.calls.length,0);dom.window.close();
+ dom=await open('login',{role:'admin',logoutError:'auth/network-request-failed'});button(dom,'เข้าใช้งานในโหมดผู้เยี่ยมชม');await tick();assert.deepEqual(dom.destinations,[]);assert.match(text(dom),/เชื่อมต่อ Firebase ไม่ได้/);dom.window.close();
  dom=await open('login');field(dom,'#email','reset@example.test');button(dom,'ลืมรหัสผ่าน');await tick();assert.equal(dom.calls[0].action,'reset');assert.match(text(dom),/หากอีเมลนี้มีบัญชี/);dom.window.close();
  dom=await open('register');for(const [id,value] of Object.entries({fn:'Test',ln:'User',fac:'คณะวิทยาศาสตร์',br:'วิทยาการคอมพิวเตอร์',sid:'1234',em:'student@example.test',p1:'test-password',p2:'test-password'}))field(dom,'#'+id,value);button(dom,'ส่งคำขอสมัคร');await tick();assert.equal(dom.calls[0].action,'register');assert.equal(dom.window.document.querySelector('#p1'),null);assert.equal(dom.window.sessionStorage.length,0);dom.window.close();
  dom=await open('reports');let printed=false;dom.window.print=()=>{printed=true;};button(dom,'ดาวน์โหลด PDF');assert.ok(printed);dom.window.close();

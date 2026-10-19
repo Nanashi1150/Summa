@@ -35,6 +35,8 @@
       </form>
       <div class="login-divider"><span>หรือ</span></div>
       <button class="google-login" type="button" data-on-click="{{googleLogin}}" disabled="{{busy}}"><span aria-hidden="true">G</span> เข้าสู่ระบบด้วย Google</button>
+      <button class="guest-login" type="button" data-on-click="{{enterGuest}}" disabled="{{busy}}" aria-describedby="guest-mode-hint">{{guestLabel}}</button>
+      <p id="guest-mode-hint" class="field-hint guest-mode-hint">ดูข้อมูลทั่วไปได้โดยไม่เข้าสู่ระบบ ไม่สามารถแก้ไขข้อมูลหรือดำเนินการกับระบบได้</p>
       <p class="login-register">ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
       <p class="field-hint login-admin-note">สิทธิ์ผู้ดูแลระบบกำหนดโดยเจ้าของระบบเท่านั้น</p>
       <a class="back-home" href="index.html">← กลับหน้าแรก</a>

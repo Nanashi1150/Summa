@@ -122,7 +122,8 @@ a:focus-visible {
   padding: 4px 0 12px;
 }
 .login-submit,
-.google-login {
+.google-login,
+.guest-login {
   font: inherit;
   font-weight: 600;
   width: 100%;
@@ -148,6 +149,19 @@ a:focus-visible {
 .google-login span {
   font-size: 22px;
   color: #176b4d;
+}
+.guest-login {
+  margin-top: 12px;
+  background: #fff4c2;
+  color: #101a2e;
+  border-color: #d3dae3;
+}
+.guest-login:hover:not(:disabled) {
+  background: #ffe066;
+  border-color: #101a2e;
+}
+.guest-mode-hint {
+  text-align: center;
 }
 .login-divider {
   display: flex;

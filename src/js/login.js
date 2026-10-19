@@ -2,7 +2,7 @@
 Summa.register('login', PageLogic => class LoginPage extends PageLogic {
   constructor(props) {
     super(props);
-    this.state={email:'',password:'',error:'',notice:'',busy:false};
+    this.state={email:'',password:'',error:'',notice:'',busy:false,guestBusy:false};
   }
   async perform(action) {
     if(this.state.busy)return;
@@ -17,7 +17,8 @@ Summa.register('login', PageLogic => class LoginPage extends PageLogic {
     const state=this.state;
     return {
       ...state,hasError:!!state.error,hasNotice:!!state.notice,
-      loginLabel:state.busy?'กำลังเข้าสู่ระบบ…':'เข้าสู่ระบบ',
+      loginLabel:state.busy&&!state.guestBusy?'กำลังเข้าสู่ระบบ…':'เข้าสู่ระบบ',
+      guestLabel:state.guestBusy?'กำลังเปิดโหมดผู้เยี่ยมชม…':'เข้าใช้งานในโหมดผู้เยี่ยมชม',
       setEmail:event=>this.setState({email:event.target.value}),
       setPassword:event=>this.setState({password:event.target.value}),
       submit:()=>{
@@ -34,6 +35,17 @@ Summa.register('login', PageLogic => class LoginPage extends PageLogic {
         const session=await SummaAuth.googleLogin();
         Summa.navigate(SummaPolicy.destination(session));
       }),
+      enterGuest:async()=>{
+        if(this.state.busy)return;
+        this.setState({busy:true,guestBusy:true,error:'',notice:''});
+        try {
+          // Clear an existing account session; guest mode never creates an anonymous account.
+          if(window.SummaAuth)await SummaAuth.logout();
+          this.state.password='';
+          Summa.navigate('index.html');
+        } catch(error) {this.setState({error:SummaPolicy.errorMessage(error)});}
+        finally {this.setState({busy:false,guestBusy:false});}
+      },
       resetPassword:()=>{
         const email=this.state.email.trim();
         if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){this.setState({error:'กรอกอีเมลในช่องด้านบนก่อนขอตั้งรหัสผ่านใหม่'});return;}
