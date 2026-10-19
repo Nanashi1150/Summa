@@ -10,6 +10,7 @@ const root=path.resolve(__dirname,'..');
   await new Promise(resolve=>server.close(resolve));
   const config=JSON.parse(fs.readFileSync(path.join(root,'firebase.json'),'utf8'));
   config.firestore.rules=path.join(root,'config','firebase','firestore.rules');
+  config.firestore.indexes=path.join(root,'config','firebase','firestore.indexes.json');
   config.emulators.firestore.port=port;
   const directory=path.join(root,'.local','test-config');
   fs.mkdirSync(directory,{recursive:true});

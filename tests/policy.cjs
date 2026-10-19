@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict');
 const policy=require('../src/services/auth-policy.js');
 const admin={ready:true,user:{uid:'admin'},profile:{role:'admin',status:'active'}};
-for(const [role,page] of [['admin','users'],['advisor','review'],['student','student']]){
+for(const [role,page] of [['admin','dashboard'],['advisor','advisor-dashboard'],['student','student']]){
   const session={...admin,viewRole:role};
   assert.equal(policy.destination(session),page+'.html');
   assert.equal(policy.canAccess(page,session),true);

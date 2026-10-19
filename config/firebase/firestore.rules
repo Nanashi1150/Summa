@@ -40,7 +40,102 @@ service cloud.firestore {
         && request.resource.data.updatedAt == request.time;
       allow delete: if false;
     }
-    // Other collections remain closed until their real data flows and rules are implemented.
+    function active() {
+      return signedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.status == 'active';
+    }
+    function projectMember(data) {
+      return active() && (isAdmin() || data.advisorId == request.auth.uid || request.auth.uid in data.studentIds);
+    }
+    function projectData(id) { return get(/databases/$(database)/documents/projects/$(id)).data; }
+    function managesProject(id) {
+      return active() && exists(/databases/$(database)/documents/projects/$(id))
+        && (isAdmin() || projectData(id).advisorId == request.auth.uid);
+    }
+    function projectStudent(id, uid) { return uid in projectData(id).studentIds; }
+    function validProject(data) {
+      return data.keys().hasAll(['code','title','term','faculty','branch','advisorId','studentIds','status','createdAt','updatedAt'])
+        && data.keys().hasOnly(['code','title','term','faculty','branch','advisorId','studentIds','status','createdAt','updatedAt'])
+        && data.code is string && data.code.size() > 0 && data.code.size() <= 50
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 500
+        && data.term is string && data.term.matches('^[0-9]{4}/[12]$')
+        && data.faculty is string && data.faculty.size() <= 200
+        && data.branch is string && data.branch.size() <= 200
+        && data.advisorId is string
+        && get(/databases/$(database)/documents/users/$(data.advisorId)).data.role == 'advisor'
+        && get(/databases/$(database)/documents/users/$(data.advisorId)).data.status == 'active'
+        && data.studentIds is list && data.studentIds.size() > 0 && data.studentIds.size() <= 10
+        && data.studentIds.toSet().size() == data.studentIds.size()
+        && data.status in ['pending_review','in_progress','ready','completed','archived']
+        && data.createdAt is timestamp && data.updatedAt == request.time;
+    }
+    match /projects/{projectId} {
+      allow read: if projectMember(resource.data);
+      allow create: if isAdmin() && validProject(request.resource.data) && request.resource.data.createdAt == request.time;
+      allow update: if validProject(request.resource.data)
+        && request.resource.data.createdAt == resource.data.createdAt
+        && (isAdmin() || (managesProject(projectId)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title','status','updatedAt'])));
+      allow delete: if false;
+
+      match /reviews/{reviewId} {
+        function validReview(data) {
+          return data.keys().hasAll(['summary','status','createdAt','updatedAt'])
+            && data.keys().hasOnly(['summary','status','createdAt','updatedAt'])
+            && data.summary is string && data.summary.size() > 0 && data.summary.size() <= 20000
+            && data.status in ['pending','approved','rejected']
+            && data.createdAt is timestamp && data.updatedAt == request.time;
+        }
+        allow read: if managesProject(projectId) || (projectMember(projectData(projectId)) && resource.data.status == 'approved');
+        allow create: if managesProject(projectId) && validReview(request.resource.data)
+          && request.resource.data.createdAt == request.time && request.resource.data.status == 'pending';
+        allow update: if managesProject(projectId) && resource.data.status != 'approved' && validReview(request.resource.data)
+          && request.resource.data.createdAt == resource.data.createdAt;
+        allow delete: if false;
+      }
+      match /tasks/{taskId} {
+        function validTask(data) {
+          return data.keys().hasAll(['title','assigneeId','reviewId','status','dueAt','createdAt','updatedAt'])
+            && data.keys().hasOnly(['title','assigneeId','reviewId','status','dueAt','createdAt','updatedAt'])
+            && data.title is string && data.title.size() > 0 && data.title.size() <= 500
+            && data.assigneeId is string && projectStudent(projectId,data.assigneeId)
+            && data.reviewId is string
+            && get(/databases/$(database)/documents/projects/$(projectId)/reviews/$(data.reviewId)).data.status == 'approved'
+            && data.status in ['todo','doing','done']
+            && (data.dueAt == null || data.dueAt is timestamp)
+            && data.createdAt is timestamp && data.updatedAt == request.time;
+        }
+        allow read: if managesProject(projectId) || (active() && projectStudent(projectId,request.auth.uid) && resource.data.assigneeId == request.auth.uid);
+        allow create: if managesProject(projectId) && validTask(request.resource.data)
+          && request.resource.data.createdAt == request.time && request.resource.data.status == 'todo';
+        allow update: if validTask(request.resource.data)
+          && request.resource.data.createdAt == resource.data.createdAt
+          && (managesProject(projectId) || (active() && resource.data.assigneeId == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','updatedAt'])));
+        allow delete: if false;
+      }
+      match /appointments/{appointmentId} {
+        function validAppointment(data) {
+          return data.keys().hasAll(['title','studentId','startsAt','endsAt','location','response','createdAt','updatedAt'])
+            && data.keys().hasOnly(['title','studentId','startsAt','endsAt','location','response','createdAt','updatedAt'])
+            && data.title is string && data.title.size() > 0 && data.title.size() <= 500
+            && data.studentId is string && projectStudent(projectId,data.studentId)
+            && data.startsAt is timestamp && data.endsAt is timestamp && data.endsAt > data.startsAt
+            && data.location is string && data.location.size() <= 500
+            && data.response in ['pending','accepted','declined']
+            && data.createdAt is timestamp && data.updatedAt == request.time;
+        }
+        allow read: if managesProject(projectId) || (active() && projectStudent(projectId,request.auth.uid) && resource.data.studentId == request.auth.uid);
+        allow create: if managesProject(projectId) && validAppointment(request.resource.data)
+          && request.resource.data.createdAt == request.time && request.resource.data.response == 'pending';
+        allow update: if validAppointment(request.resource.data) && request.resource.data.createdAt == resource.data.createdAt
+          && ((managesProject(projectId) && request.resource.data.response == 'pending')
+            || (active() && resource.data.studentId == request.auth.uid
+              && request.resource.data.response in ['accepted','declined']
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['response','updatedAt'])));
+        allow delete: if false;
+      }
+    }
+    // Raw sources, provider credentials and audit events have no browser access.
     match /{document=**} { allow read, write: if false; }
   }
 }

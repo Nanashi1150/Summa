@@ -20,6 +20,7 @@ const {doc,getDoc,getDocs,collection,setDoc,updateDoc,serverTimestamp,Timestamp}
    await assertSucceeds(updateDoc(doc(admin,'users','pending'),{status:'active',updatedAt:serverTimestamp()}));assert.equal((await getDoc(doc(admin,'users','pending'))).data().status,'active');
    await assertFails(updateDoc(doc(admin,'users','admin'),{status:'suspended',updatedAt:serverTimestamp()}));await assertFails(updateDoc(doc(admin,'users','other-admin'),{status:'suspended',updatedAt:serverTimestamp()}));
    await assertFails(updateDoc(doc(admin,'users','student'),{role:'admin',updatedAt:serverTimestamp()}));await assertFails(updateDoc(doc(admin,'users','student'),{email:'other@example.test',updatedAt:serverTimestamp()}));
+   await require('./project-rules.cjs')(env,client);
    await assertSucceeds(updateDoc(doc(admin,'users','student'),{role:'advisor',updatedAt:serverTimestamp()}));await assertFails(setDoc(doc(guest,'reviews','one'),{status:'approved'}));await assertFails(setDoc(doc(student,'reviews','one'),{status:'approved'}));
    console.log('PASS: Firestore rules deny guest access, privilege escalation, self-approval, suspended admins and protected-account edits; allow pending registration and authorized activation.');
  } finally {await env.cleanup();}

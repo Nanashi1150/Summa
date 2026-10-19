@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard อาจารย์ | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/dashboard.css">
+  <link rel="stylesheet" href="assets/styles/advisor-dashboard.css">
+  <script defer src="assets/services/auth-policy.js"></script>
+  <script defer src="assets/components/confirm-dialog.js"></script>
+  <script defer src="assets/components/navbar.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/services/firebase.bundle.js"></script>
+  <script defer src="assets/components/project-data.js"></script>
+  <script defer src="assets/js/advisor-dashboard.js"></script>
+</head>
+<body data-page="advisor-dashboard" data-role="advisor" data-auth="pending">
+  <div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden></div>
+  <main id="main-content" tabindex="-1"><div id="page-root"></div></main>
+  <template id="page-template">
+    <div class="dashboard-page">
+      <div class="dashboard-toolbar">
+        <div><label for="advisor-term">ภาคเรียน</label><select id="advisor-term" value="{{term}}" data-on-change="{{setTerm}}"><option value="all">ทุกภาคเรียน</option><template data-each="terms" data-as="t"><option value="{{t.value}}">{{t.label}}</option></template></select></div>
+        <div class="dashboard-export"><button type="button" data-on-click="{{exportPdf}}">ส่งออก PDF · A4</button><span>เลือก “บันทึกเป็น PDF” ในหน้าต่างพิมพ์</span></div>
+      </div>
+      <article class="dashboard-sheet advisor-sheet" aria-label="ภาพรวมสำหรับอาจารย์ที่ปรึกษา">
+        <header class="dashboard-heading"><div><p class="dashboard-eyebrow">SUMMA / ADVISOR OVERVIEW</p><h1>Dashboard อาจารย์</h1><p>ภาพรวมโครงงานที่ดูแล · {{advisor}}</p></div><span class="dashboard-source">ข้อมูลตัวอย่าง</span></header>
+        <div class="dashboard-meta"><span>{{termLabel}}</span><span>วันที่ออกรายงาน {{generatedDate}}</span></div>
+        <section class="dashboard-kpis" aria-label="ตัวเลขสรุปสำหรับอาจารย์"><template data-each="kpis" data-as="k"><div class="dashboard-kpi"><span>{{k.label}}</span><strong data-metric="{{k.key}}">{{k.value}}</strong><small>{{k.note}}</small></div></template></section>
+        <nav class="advisor-shortcuts" aria-label="งานของอาจารย์"><a href="review.html">ตรวจสอบผลสรุป →</a><a href="projects.html">โครงงานที่ดูแล →</a><a href="manual-import.html">นำเข้าข้อเสนอแนะ →</a></nav>
+        <div class="dashboard-charts">
+          <section class="dashboard-card"><h2>สถานะโครงงานที่ดูแล</h2><p class="dashboard-subtitle">{{total}} โครงงาน · จำนวนและสัดส่วนในภาคเรียนที่เลือก</p><div class="advisor-status-bars"><template data-each="statuses" data-as="s"><div><div class="advisor-bar-label"><span>{{s.label}}</span><strong>{{s.count}} โครงงาน · {{s.percent}}%</strong></div><div class="chart-track" role="img" aria-label="{{s.description}}"><span style="width:{{s.width}}%;background:{{s.color}}"></span></div></div></template></div></section>
+          <section class="dashboard-card advisor-appointments"><h2>นัดหมายการให้คำปรึกษา</h2><p class="dashboard-subtitle">นัดหมายตัวอย่างของโครงงานในภาคเรียนที่เลือก</p><template data-each="appointments" data-as="a"><div class="advisor-appointment"><span class="advisor-date">{{a.date}}</span><h3>{{a.project}} · {{a.title}}</h3><p>{{a.time}} · {{a.place}}</p><span class="advisor-badge">{{a.status}}</span></div></template><template data-if="noAppointments"><p class="advisor-empty">ไม่มีนัดหมายตัวอย่างในภาคเรียนนี้</p></template></section>
+        </div>
+        <section class="dashboard-card advisor-projects"><div class="dashboard-card-title"><div><h2>โครงงานในความดูแล</h2><p class="dashboard-subtitle">เฉพาะโครงงานของ {{advisor}}</p></div><a href="projects.html">ดูรายการทั้งหมด →</a></div><div class="dashboard-table-wrap"><table><caption class="sr-only">รายการโครงงานที่ดูแลใน {{termLabel}}</caption><thead><tr><th scope="col">โครงงาน / นักศึกษา</th><th scope="col">หัวข้อ</th><th scope="col">สถานะ</th></tr></thead><tbody><template data-each="projects" data-as="p"><tr><th scope="row"><strong>{{p.code}}</strong><span>{{p.name}}</span></th><td>{{p.topic}}</td><td><span class="advisor-badge" style="background:{{p.bg}};color:{{p.fg}}">{{p.status}}</span></td></tr></template></tbody></table><template data-if="noProjects"><p class="advisor-empty">ยังไม่มีโครงงานในภาคเรียนนี้</p></template></div></section>
+        <section class="dashboard-card advisor-tasks"><div class="dashboard-card-title"><div><h2>งานที่ต้องติดตาม</h2><p class="dashboard-subtitle">ข้อเสนอแนะตัวอย่างสำหรับ CS-01</p></div><a href="review.html">เปิดหน้าตรวจสอบ →</a></div><ul><template data-each="tasks" data-as="t"><li><div><strong>{{t.title}}</strong><p>{{t.project}} · {{t.due}}</p></div><span class="advisor-badge">{{t.status}}</span></li></template></ul><template data-if="noTasks"><p class="advisor-empty">ไม่มีงานติดตามตัวอย่างในภาคเรียนนี้</p></template></section>
+        <footer class="dashboard-report-footer"><span>ข้อมูลตัวอย่างของ อ.นุจรินทร์ ปทุมพงษ์ ยังไม่เชื่อมข้อมูลโครงงานจริง</span><span>Summa · รายงานอาจารย์ · A4</span></footer>
+      </article>
+    </div>
+  </template>
+  <noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · ภาพรวมการให้คำปรึกษาจากข้อมูลตัวอย่าง</footer>
+</body>
+</html>

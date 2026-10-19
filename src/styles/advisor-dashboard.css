@@ -1,0 +1,49 @@
+.advisor-shortcuts { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+.advisor-shortcuts a { border:1px solid #c4cdd9; border-radius:8px; padding:10px 16px; color:#101a2e; text-decoration:none; font-size:13px; }
+.advisor-shortcuts a:first-child { background:#fff4c2; border-color:#d19a18; }
+.advisor-shortcuts a:hover { background:#f4f6f8; }
+.advisor-status-bars { display:grid; gap:18px; margin-top:22px; }
+.advisor-bar-label { display:flex; justify-content:space-between; gap:10px; font-size:12px; margin-bottom:8px; }
+.advisor-bar-label strong { font-size:11px; font-weight:500; }
+.advisor-appointment { border-left:3px solid #17775b; padding:4px 0 4px 16px; margin-top:22px; }
+.advisor-date { font-size:14px; color:#176b4d; font-weight:600; }
+.advisor-appointment h3 { margin:10px 0 6px; font-size:14px; }
+.advisor-appointment p { font-size:12px; color:#566275; margin:0 0 16px; }
+.advisor-badge { display:inline-block; padding:5px 9px; font-size:11px; border-radius:5px; background:#fff4c2; color:#5c4300; white-space:nowrap; }
+.advisor-projects,.advisor-tasks { margin-top:20px; }
+.advisor-sheet .dashboard-card-title a { color:#176b4d; font-size:12px; }
+.advisor-projects table { width:100%; border-collapse:collapse; text-align:left; font-size:12px; }
+.advisor-projects thead { background:#f4f6f8; font-size:11px; }
+.advisor-projects th,.advisor-projects td { padding:12px 8px; border-bottom:1px solid #e6ecf3; }
+.advisor-projects tbody th { font-weight:400; min-width:160px; }
+.advisor-projects tbody th > span { display:block; margin-top:4px; font-size:11px; color:#566275; }
+.advisor-tasks ul { list-style:none; margin:14px 0 0; padding:0; }
+.advisor-tasks li { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 0; border-top:1px solid #e6ecf3; }
+.advisor-tasks li strong { font-size:12px; font-weight:500; }
+.advisor-tasks li p { font-size:11px; color:#566275; margin:4px 0 0; }
+.advisor-empty { color:#60718b; font-size:12px; padding:20px 0; }
+@media (max-width:600px) {
+  .advisor-projects table { min-width:540px; }
+  .advisor-tasks li { align-items:flex-start; flex-direction:column; gap:8px; }
+}
+@media print {
+  .advisor-shortcuts,.advisor-sheet .dashboard-card-title a { display:none !important; }
+  .advisor-sheet .dashboard-charts { margin-bottom:0; }
+  .advisor-status-bars { gap:12px; margin-top:14px; }
+  .advisor-bar-label { font-size:9px; margin-bottom:5px; }
+  .advisor-bar-label strong { font-size:8px; }
+  .advisor-appointment { margin-top:14px; padding-left:10px; }
+  .advisor-date { font-size:11px; }
+  .advisor-appointment h3 { font-size:10px; }
+  .advisor-appointment p { font-size:9px; }
+  .advisor-badge { font-size:8px; padding:3px 5px; }
+  .advisor-projects,.advisor-tasks { margin-top:12px; }
+  .advisor-projects table { min-width:0; font-size:9px; }
+  .advisor-projects thead { font-size:8px; }
+  .advisor-projects th,.advisor-projects td { padding:8px 5px; }
+  .advisor-projects tbody th { min-width:110px; }
+  .advisor-projects tbody th > span { font-size:8px; }
+  .advisor-tasks li { flex-direction:row; align-items:center; padding:8px 0; }
+  .advisor-tasks li strong { font-size:9px; }
+  .advisor-tasks li p { font-size:8px; }
+}

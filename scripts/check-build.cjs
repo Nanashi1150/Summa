@@ -15,6 +15,6 @@ for(const name of fs.readdirSync(path.join(root,'assets/styles')).filter(name=>n
   const css=fs.readFileSync(path.join(root,'assets/styles',name),'utf8');
   for(const match of css.matchAll(/url\(['"]?([^)'"\s]+)['"]?\)/g))verify(match[1],path.join(root,'assets/styles'));
 }
-assert.equal(fs.readdirSync(root).filter(name=>name.endsWith('.html')).length,16);
+assert.equal(fs.readdirSync(root).filter(name=>name.endsWith('.html')).length,18);
 assert.deepEqual(fs.readdirSync(root).filter(name=>!name.endsWith('.html')),['assets']);
-console.log('PASS: 16 public pages and '+checked+' local resource references.');
+console.log('PASS: 18 public pages and '+checked+' local resource references.');

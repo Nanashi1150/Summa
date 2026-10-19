@@ -10,7 +10,7 @@ fs.cpSync(path.join(root,'src'),source,{recursive:true});
 fs.appendFileSync(path.join(source,'pages','login.html'),'\n<!-- independent-page-test -->\n');
 fs.appendFileSync(path.join(source,'js','login.js'),'\n/* independent-controller-test */\n');
 fs.appendFileSync(path.join(source,'styles','login.css'),'\n/* independent-stylesheet-test */\n');
-assert.equal(buildSite({sourceRoot:source,outputRoot:output}).length,16);
+assert.equal(buildSite({sourceRoot:source,outputRoot:output}).length,18);
 assert.match(fs.readFileSync(path.join(output,'login.html'),'utf8'),/independent-page-test/);
 assert.match(fs.readFileSync(path.join(output,'assets/js/login.js'),'utf8'),/independent-controller-test/);
 assert.match(fs.readFileSync(path.join(output,'assets/styles/login.css'),'utf8'),/independent-stylesheet-test/);

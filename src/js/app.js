@@ -4,8 +4,20 @@
   const registry = new Map();
   const instances = new Set();
   let actionInFlight = false;
-  function currentSession() {return window.SummaAuth?.state || {ready:true,user:null,profile:null,error:{code:'summa/unavailable'}};}
-  function navigate(url) {window.location.assign(url);}
+  const requestedDemo = new URLSearchParams(window.location.search).get('demo');
+  const demoRole = ['student','advisor','admin'].includes(requestedDemo) && !SummaPolicy.publicPages.includes(document.body.dataset.page) ? requestedDemo : null;
+  const demoLabels = {student:'นักศึกษา',advisor:'อาจารย์ที่ปรึกษา',admin:'ผู้ดูแลระบบ'};
+  // Preview identity is local to the renderer. Never replace the real Firebase service/session.
+  const demoSession = demoRole ? {ready:true,user:{uid:'demo-'+demoRole},profile:{role:demoRole,status:'active',name:demoLabels[demoRole]+' (ตัวอย่าง)'}} : null;
+  function currentSession() {return demoSession || window.SummaAuth?.state || {ready:true,user:null,profile:null,error:{code:'summa/unavailable'}};}
+  function previewUrl(url) {
+    if(!demoRole)return url;
+    const target=new URL(url,window.location.href);
+    const page=target.pathname.split('/').at(-1).replace(/\.html$/,'');
+    if(target.origin===window.location.origin && SummaPolicy.access[page]?.includes(demoRole))target.searchParams.set('demo',demoRole);
+    return target.href;
+  }
+  function navigate(url) {window.location.assign(previewUrl(url));}
   function notify(message) {
     const notice=document.getElementById('auth-status');
     if(notice){notice.textContent=message;notice.hidden=false;}
@@ -54,7 +66,7 @@
     if (!Component) throw new Error('Missing page component: '+name);
     const instance = new Component(props);
     instances.add(instance);
-    if (!['login','register','manual-import','index','users'].includes(name) && currentSession().user) {
+    if (!demoRole && !['login','register','manual-import','index','users','review'].includes(name) && currentSession().user) {
       instance.storageKey = 'summa:v2:'+currentSession().user.uid+':'+name+':'+(props.scope || 'page');
       try { const saved = JSON.parse(sessionStorage.getItem(instance.storageKey)); if(saved) Object.assign(instance.state,saved); } catch { /* keep defaults */ }
     }
@@ -92,7 +104,7 @@
           const resolved = value(attr.value,scope);
           if(['disabled','checked','selected','required','multiple'].includes(attr.name) && /{{/.test(attr.value)) {
             if(get(scope,attr.value.replace(/[{}]/g,''))) node.setAttribute(attr.name,''); else node.removeAttribute(attr.name);
-          } else node.setAttribute(attr.name,resolved);
+          } else node.setAttribute(attr.name,attr.name==='href'?previewUrl(resolved):resolved);
         }
       }
       for(const child of source.childNodes) node.append(renderNode(child,scope));
@@ -103,7 +115,7 @@
     instance.update = () => {
       const focused = host.contains(document.activeElement) ? document.activeElement : null;
       const controlIndex = focused ? [...host.querySelectorAll('input,select,textarea,button,a')].indexOf(focused) : -1;
-      const selection = focused && /^(text|search|password|email)$/.test(focused.type) ? [focused.selectionStart,focused.selectionEnd] : null;
+      const selection = focused && (focused.tagName==='TEXTAREA' || /^(text|search|password|email)$/.test(focused.type)) ? [focused.selectionStart,focused.selectionEnd] : null;
       children.forEach(child=>child.destroy()); children=[];
       const scope = {...instance.props,...instance.renderVals()};
       const fragment = document.createDocumentFragment();
@@ -125,7 +137,7 @@
   }
   window.Summa = {
     register(name,factory){const Component=factory(PageLogic);registry.set(name,Component);},
-    navigate,confirm:confirmAction
+    navigate,confirm:confirmAction,demoRole,previewUrl
   };
   document.addEventListener('DOMContentLoaded', () => {
     const page=document.body.dataset.page;
@@ -134,6 +146,11 @@
     let mounted=null;
     let mountedIdentity=null;
     const navigation=SummaNavbar.create({page,notify,navigate:url=>Summa.navigate(url)});
+    if(demoRole){
+      const notice=document.createElement('aside');notice.className='preview-banner';notice.setAttribute('aria-label','โหมดตัวอย่าง');
+      const label=document.createElement('span');label.textContent='กำลังเยี่ยมชมในมุมมอง'+demoLabels[demoRole]+' · ข้อมูลตัวอย่าง การเปลี่ยนแปลงจะไม่บันทึกลงระบบจริง';
+      const exit=document.createElement('a');exit.href='index.html';exit.textContent='กลับหน้าแรก';notice.append(label,exit);document.getElementById('main-content').before(notice);
+    }
     function refreshAccess() {
       const session=currentSession();
       navigation.update(session);
@@ -142,7 +159,7 @@
       document.body.dataset.auth=allowed?'allowed':(session.ready?'denied':'pending');
       const identity=publicPage?'public':session.user?.uid+':'+session.profile?.role+':'+SummaPolicy.effectiveRole(session);
       if(allowed) {
-        if(!mounted || identity!==mountedIdentity){mounted?.destroy();mounted=mount(root,template,document.body.dataset.controller || page);mountedIdentity=identity;}
+        if(!mounted || identity!==mountedIdentity){mounted?.destroy();mounted=mount(root,template,document.body.dataset.controller || page,{demo:demoRole});mountedIdentity=identity;}
         return;
       }
       mounted?.destroy();mounted=null;mountedIdentity=null;root.replaceChildren();

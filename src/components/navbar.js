@@ -3,8 +3,8 @@
   const menus={
     public:[['หน้าแรก','index'],['วิธีทำงาน','index#how'],['สำหรับใคร','index#roles'],['สมัครสมาชิก','register'],['เข้าสู่ระบบ','login']],
     student:[['ภาพรวม','student'],['รายงาน','reports']],
-    advisor:[['รอตรวจสอบ','review'],['โครงงานที่ดูแล','projects'],['นำเข้าจากภาพ','manual-import'],['เชื่อมต่อ Gmail','gmail'],['รายงาน','reports']],
-    admin:[['ผู้ใช้และสิทธิ์','users'],['โครงงานทั้งหมด','admin-projects'],['นำเข้าอีเมล','imports'],['การเชื่อมต่อระบบ','integrations'],['บันทึกการใช้งาน','logs']]
+    advisor:[['Dashboard','advisor-dashboard'],['รอตรวจสอบ','review'],['โครงงานที่ดูแล','projects'],['นำเข้าจากภาพ','manual-import'],['เชื่อมต่อ Gmail','gmail'],['รายงาน','reports']],
+    admin:[['Dashboard','dashboard'],['ผู้ใช้และสิทธิ์','users'],['โครงงานทั้งหมด','admin-projects'],['นำเข้าอีเมล','imports'],['การเชื่อมต่อระบบ','integrations'],['บันทึกการใช้งาน','logs']]
   };
   function href(name){const [page,hash]=name.split('#');return page+'.html'+(hash?'#'+hash:'');}
   function create({page,notify,navigate}) {
@@ -23,9 +23,19 @@
       const role=SummaPolicy.publicPages.includes(page)?'public':(SummaPolicy.effectiveRole(session) || document.body.dataset.role);
       header.classList.toggle('is-admin',role==='admin');
       nav.replaceChildren();
-      for(const [label,name] of menus[role] || menus.public){const link=document.createElement('a');link.textContent=label;link.href=href(name);if(name===page)link.setAttribute('aria-current','page');nav.append(link);}
+      for(const [label,name] of menus[role] || menus.public){const link=document.createElement('a');link.textContent=label;link.href=Summa.previewUrl(href(name));if(name===page)link.setAttribute('aria-current','page');nav.append(link);}
       account.querySelector('summary').textContent=active?(session.profile.name || session.user.email):'ผู้เยี่ยมชม';
       const panel=account.querySelector('.account-panel');panel.replaceChildren();
+      if(page==='index' || Summa.demoRole){
+        account.querySelector('summary').textContent=Summa.demoRole?session.profile.name:'เลือกผู้ใช้งาน';
+        const label=document.createElement('p');label.textContent='เยี่ยมชมตามบทบาท';panel.append(label);
+        for(const [value,title,destination] of [['student','นักศึกษา','student'],['advisor','อาจารย์ที่ปรึกษา','advisor-dashboard'],['admin','ผู้ดูแลระบบ','dashboard']]){
+          const link=document.createElement('a');link.textContent=title;link.href=destination+'.html?demo='+value;
+          if(Summa.demoRole===value)link.setAttribute('aria-current','true');panel.append(link);
+        }
+        if(Summa.demoRole){const exit=document.createElement('a');exit.textContent='กลับหน้าแรก';exit.href='index.html';panel.append(exit);}
+        return;
+      }
       const link=document.createElement('a');link.textContent=active?'พื้นที่ทำงานของฉัน':'เข้าสู่ระบบ';link.href=active?SummaPolicy.destination(session):'login.html';panel.append(link);
       if(active){
         if(session.profile.role==='admin'){

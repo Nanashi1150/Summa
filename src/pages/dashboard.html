@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard ผู้ดูแลระบบ | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/dashboard.css">
+  <script defer src="assets/services/auth-policy.js"></script>
+  <script defer src="assets/components/confirm-dialog.js"></script>
+  <script defer src="assets/components/navbar.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/services/firebase.bundle.js"></script>
+  <script defer src="assets/components/project-data.js"></script>
+  <script defer src="assets/js/dashboard.js"></script>
+</head>
+<body data-page="dashboard" data-role="admin" data-auth="pending">
+  <div id="navbar-root"></div>
+  <div id="auth-status" class="page-feedback form-alert" role="alert" hidden></div>
+  <main id="main-content" tabindex="-1"><div id="page-root"></div></main>
+  <template id="page-template">
+    <div class="dashboard-page">
+      <div class="dashboard-toolbar">
+        <div><label for="dashboard-term">ภาคเรียน</label><select id="dashboard-term" value="{{term}}" data-on-change="{{setTerm}}">
+          <option value="all">ทุกภาคเรียน</option>
+          <template data-each="terms" data-as="t"><option value="{{t.value}}">{{t.label}}</option></template>
+        </select></div>
+        <div class="dashboard-export"><button type="button" data-on-click="{{exportPdf}}">ส่งออก PDF · A4</button><span>เลือก “บันทึกเป็น PDF” ในหน้าต่างพิมพ์</span></div>
+      </div>
+      <article class="dashboard-sheet" aria-label="รายงานภาพรวมผู้ดูแลระบบ">
+        <header class="dashboard-heading">
+          <div><p class="dashboard-eyebrow">SUMMA / ADMIN OVERVIEW</p><h1>Dashboard ผู้ดูแลระบบ</h1><p>ภาพรวมโครงงานและความคืบหน้าการให้คำปรึกษา</p></div>
+          <span class="dashboard-source">ข้อมูลตัวอย่าง</span>
+        </header>
+        <div class="dashboard-meta"><span>{{termLabel}}</span><span>วันที่ออกรายงาน {{generatedDate}}</span></div>
+        <section class="dashboard-kpis" aria-label="ตัวเลขสรุปโครงงาน">
+          <template data-each="kpis" data-as="k"><div class="dashboard-kpi"><span>{{k.label}}</span><strong data-metric="{{k.key}}">{{k.value}}</strong><small>{{k.note}}</small></div></template>
+        </section>
+        <div class="dashboard-charts">
+          <section class="dashboard-card dashboard-status"><h2>สถานะโครงงาน</h2><p class="dashboard-subtitle">สัดส่วนจาก {{total}} โครงงานในภาคเรียนที่เลือก</p>
+            <div class="dashboard-donut-layout">
+              <svg class="dashboard-donut" viewBox="0 0 200 200" role="img" aria-label="{{statusDescription}}">
+                <circle cx="100" cy="100" r="72" fill="none" stroke="#e6ecf3" stroke-width="23"></circle>
+                <circle cx="100" cy="100" r="72" pathLength="100" fill="none" stroke="{{statuses.0.color}}" stroke-width="23" stroke-dasharray="{{statuses.0.dash}}" stroke-dashoffset="{{statuses.0.offset}}" transform="rotate(-90 100 100)"></circle>
+                <circle cx="100" cy="100" r="72" pathLength="100" fill="none" stroke="{{statuses.1.color}}" stroke-width="23" stroke-dasharray="{{statuses.1.dash}}" stroke-dashoffset="{{statuses.1.offset}}" transform="rotate(-90 100 100)"></circle>
+                <circle cx="100" cy="100" r="72" pathLength="100" fill="none" stroke="{{statuses.2.color}}" stroke-width="23" stroke-dasharray="{{statuses.2.dash}}" stroke-dashoffset="{{statuses.2.offset}}" transform="rotate(-90 100 100)"></circle>
+                <circle cx="100" cy="100" r="72" pathLength="100" fill="none" stroke="{{statuses.3.color}}" stroke-width="23" stroke-dasharray="{{statuses.3.dash}}" stroke-dashoffset="{{statuses.3.offset}}" transform="rotate(-90 100 100)"></circle>
+                <text x="100" y="98" text-anchor="middle" class="donut-total">{{total}}</text><text x="100" y="122" text-anchor="middle" class="donut-caption">โครงงาน</text>
+              </svg>
+              <ul class="dashboard-legend"><template data-each="statuses" data-as="s"><li><span class="chart-dot" style="background:{{s.color}}"></span><span>{{s.label}}</span><strong>{{s.count}}</strong><small>{{s.percent}}%</small></li></template></ul>
+            </div>
+          </section>
+          <section class="dashboard-card"><h2>โครงงานแยกตามคณะ</h2><p class="dashboard-subtitle">จำนวนโครงงานและอาจารย์ที่ปรึกษาแต่ละคณะ</p>
+            <div class="dashboard-faculties"><template data-each="faculties" data-as="f"><div class="faculty-chart"><div><span>{{f.label}}</span><strong>{{f.total}} โครงงาน</strong></div><div class="chart-track" role="img" aria-label="{{f.description}}"><span style="width:{{f.width}}%"></span></div><small>อาจารย์ที่ปรึกษา {{f.advisors}} คน</small></div></template></div>
+          </section>
+        </div>
+        <section class="dashboard-card dashboard-term-chart"><div class="dashboard-card-title"><div><h2>ภาพรวมแต่ละภาคเรียน</h2><p class="dashboard-subtitle">เปรียบเทียบจำนวนโครงงานทั้งหมดกับโครงงานที่เสร็จสิ้น</p></div><div class="term-legend"><span><i class="chart-dot total-dot"></i>ทั้งหมด</span><span><i class="chart-dot done-dot"></i>เสร็จสิ้น</span></div></div>
+          <div class="term-bars"><template data-each="termComparison" data-as="t"><div class="term-row"><strong>{{t.label}}</strong><div><div class="term-track"><span class="term-total" style="width:{{t.totalWidth}}%"></span><b>{{t.total}}</b></div><div class="term-track"><span class="term-done" style="width:{{t.doneWidth}}%"></span><b>{{t.done}}</b></div></div></div></template></div>
+          <p class="dashboard-chart-note">กราฟเปรียบเทียบแสดงทุกภาคเรียนเสมอ ส่วนตัวเลขสรุปและตารางใช้ภาคเรียนที่เลือก</p>
+        </section>
+        <section class="dashboard-card dashboard-summary"><div class="dashboard-card-title"><h2>สรุปโครงงานรายคณะ</h2><a href="admin-projects.html">ดูโครงงานทั้งหมด →</a></div>
+          <div class="dashboard-table-wrap"><table><caption class="sr-only">จำนวนโครงงานตามสถานะแยกรายคณะสำหรับ {{termLabel}}</caption><thead><tr><th scope="col">คณะ</th><th scope="col">ทั้งหมด</th><th scope="col">รอตรวจ</th><th scope="col">กำลังดำเนินการ</th><th scope="col">พร้อมสอบ</th><th scope="col">เสร็จสิ้น</th></tr></thead><tbody><template data-each="faculties" data-as="f"><tr><th scope="row">{{f.label}}</th><td>{{f.total}}</td><td>{{f.review}}</td><td>{{f.doing}}</td><td>{{f.ready}}</td><td>{{f.done}}</td></tr></template></tbody><tfoot><tr><th scope="row">รวม</th><td>{{total}}</td><td>{{review}}</td><td>{{doing}}</td><td>{{ready}}</td><td>{{done}}</td></tr></tfoot></table></div>
+        </section>
+        <footer class="dashboard-report-footer"><span>แหล่งข้อมูล: ชุดข้อมูลตัวอย่างเดียวกับหน้าโครงงานทั้งหมด</span><span>Summa · รายงานผู้ดูแลระบบ · A4</span></footer>
+      </article>
+    </div>
+  </template>
+  <noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript>
+  <footer class="site-footer">Summa · ภาพรวมข้อมูลโครงงานตัวอย่าง</footer>
+</body>
+</html>

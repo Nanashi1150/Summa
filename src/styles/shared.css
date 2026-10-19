@@ -454,3 +454,19 @@ input:disabled {
   color: #5c4300;
   border-radius: 8px;
 }
+.preview-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  padding: 14px 28px;
+  background: #fff4c2;
+  color: #5c4300;
+  font-size: 14px;
+}
+.preview-banner a {
+  color: inherit;
+  font-weight: 600;
+  padding: 8px 0;
+}

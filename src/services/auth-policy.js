@@ -4,11 +4,11 @@
   const publicPages = ['index', 'login', 'register'];
   const access = {
     student: ['student'], reports: ['student', 'advisor'],
-    review: ['advisor'], projects: ['advisor'], gmail: ['advisor'], 'manual-import': ['advisor'],
-    users: ['admin'], 'admin-projects': ['admin'], imports: ['admin'], integrations: ['admin'], logs: ['admin'],
+    'advisor-dashboard': ['advisor'], review: ['advisor'], projects: ['advisor'], gmail: ['advisor'], 'manual-import': ['advisor'],
+    dashboard: ['admin'], users: ['admin'], 'admin-projects': ['admin'], imports: ['admin'], integrations: ['admin'], logs: ['admin'],
     navbar: ['advisor', 'admin'], 'project-tree': ['advisor', 'admin']
   };
-  const home = {student: 'student.html', advisor: 'review.html', admin: 'users.html'};
+  const home = {student: 'student.html', advisor: 'advisor-dashboard.html', admin: 'dashboard.html'};
   function effectiveRole(state) {
     const role=state?.profile?.role;
     return role==='admin' && state.profile.status==='active' && ['admin','advisor','student'].includes(state.viewRole) ? state.viewRole : role;
@@ -19,6 +19,7 @@
   function destination(state) { return state?.ready && state.user && state.profile?.status === 'active' ? home[effectiveRole(state)] || 'login.html' : 'login.html'; }
   function errorMessage(error) {
     const messages = {
+      'summa/invalid-data': 'ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบข้อมูลและบัญชีสมาชิกโครงงาน',
       'auth/invalid-credential': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
       'auth/user-not-found': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
       'auth/wrong-password': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',

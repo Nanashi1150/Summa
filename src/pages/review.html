@@ -12,7 +12,7 @@
   <script defer="" src="assets/services/firebase.bundle.js"></script>
   <script defer="" src="assets/js/review.js"></script>
 </head>
-<body data-page="review" data-role="advisor" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template"><p class="page-feedback demo-notice">โหมดตัวอย่างโครงงาน: การอนุมัติ งาน และนัดหมายในหน้านี้ยังไม่เปลี่ยนข้อมูลโครงงานจริง</p>
+<body data-page="review" data-role="advisor" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template"><p class="page-feedback demo-notice">สกัดข้อความด้วย Gemma 4 ได้จริง · รายการโครงงานและการเผยแพร่ยังเป็นตัวอย่าง ไม่บันทึกอีเมลหรือผลสรุปลงฐานข้อมูลอัตโนมัติ</p>
 
 <div class="page-full-height review-style-1">
 
@@ -21,7 +21,7 @@
 <!-- SIDE -->
 <div class="responsive-sidebar review-style-3">
   <div>
-    <div class="review-style-4">อีเมลรอตรวจ 3 ฉบับ</div>
+    <div class="review-style-4">ตัวอย่างอีเมล · ยังไม่ดึงจาก Gmail</div>
     <div class="review-style-5">
       <template data-each="queue" data-as="q">
         <div style="border:1.5px solid {{q.border}};background:{{q.bg}}" class="review-style-6">
@@ -38,11 +38,20 @@
 <div class="responsive-page-padding review-style-10">
   <div class="review-style-11">
     <div class="review-style-12">
-      <h1 class="review-style-13">ผลการให้คำปรึกษา CS-01</h1>
-      <div class="review-style-14">อีเมลตอบกลับของอาจารย์ · จับคู่กับโครงงาน CS-01 · ตัวอย่างข้อมูล</div>
+      <h1 class="review-style-13">สกัดและตรวจสอบข้อมูลอีเมล</h1>
+      <div class="review-style-14">ตรวจผลสรุป งาน และนัดหมายเทียบกับข้อความต้นฉบับ</div>
     </div>
     <div style="background:{{statusBg}};color:{{statusFg}}" class="review-style-15">{{statusText}}</div>
   </div>
+
+  <section class="review-ai-input" aria-label="ประมวลผลอีเมลด้วย Gemma 4">
+    <label for="email-source">ข้อความอีเมลที่ต้องการสกัดข้อมูล</label>
+    <p>วางข้อความอีเมลแล้วกดสกัดข้อมูล ข้อความจะถูกส่งไปประมวลผลด้วย Gemma 4 บน Ollama Cloud</p>
+    <textarea id="email-source" rows="6" maxlength="20000" value="{{original}}" data-on-change="{{sourceChanged}}" disabled="{{busy}}"></textarea>
+    <button type="button" data-on-click="{{synthesize}}" disabled="{{busy}}">{{processLabel}}</button>
+    <span role="status" aria-live="polite">{{aiLabel}}</span>
+    <template data-if="hasError"><p role="alert" class="review-ai-error">{{error}}</p></template>
+  </section>
 
   <div class="review-style-16">
 
@@ -50,7 +59,7 @@
     <div class="review-style-17">
       <div class="review-style-18">ข้อความต้นฉบับ</div>
       <div class="review-style-19">
-        <span>จาก อาจารย์ที่ปรึกษา</span><span>ถึง นักศึกษาโครงงาน CS-01</span><span>12 ต.ค. 2569 · 16:42</span>
+        <span>ต้นฉบับจากช่องข้อความอีเมลด้านบน</span><span>ยังไม่ได้จับคู่กับโครงงานจริง</span>
       </div>
       <div class="review-style-20">
         <template data-each="segments" data-as="s">
@@ -59,16 +68,18 @@
           </template>
           <template data-if="s.isPlain"><span>{{s.text}}</span></template>
         </template>
-        <p class="review-style-22">นักศึกษาเห็นเฉพาะส่วนที่ไฮไลต์เมื่อเผยแพร่</p>
+        <p class="review-style-22">คลิกรายการผลสรุปเพื่อไฮไลต์ข้อความต้นฉบับที่ใช้อ้างอิง</p>
       </div>
     </div>
 
     <!-- AI summary -->
     <div class="review-style-17">
       <div class="review-style-23">
-        <span>ผลสรุปจาก AI</span><span class="review-style-24">ประเภทอีเมล: ให้ข้อเสนอแนะ</span>
+        <span>ผลสรุปจาก AI</span><span class="review-style-24">{{aiLabel}}</span>
       </div>
-      <div class="review-style-25">ความคืบหน้าโดยรวมดี มีงานแก้ไข 2 รายการก่อนสอบความก้าวหน้า และนัดพบครั้งถัดไป 1 ครั้ง</div>
+      <div class="review-style-25">{{summary}}</div>
+      <template data-if="hasResult"><label class="review-summary-label" for="summary-edit">ตรวจแก้ข้อความสรุปก่อนตรวจรับ</label><textarea id="summary-edit" class="review-summary-edit" rows="4" value="{{summary}}" data-on-change="{{editSummary}}" disabled="{{busy}}"></textarea></template>
+      <template data-if="noItems"><p class="review-style-25">ไม่พบรายการงานหรือนัดหมายที่ต้องดำเนินการ</p></template>
       <div class="review-style-26">
         <template data-each="items" data-as="it">
           <button type="button" data-on-click="{{it.pick}}" style="border:1.5px solid {{it.border}};background:{{it.bg}}" class="review-style-27">
@@ -76,8 +87,9 @@
             <span class="review-style-29">{{it.title}}</span>
             <span class="review-style-30">ผู้รับผิดชอบ {{it.owner}} · {{it.due}}</span>
             <template data-if="it.warn">
-              <span class="review-style-31">ไม่พบกำหนดส่งในข้อความ กรุณากำหนดก่อนอนุมัติ</span>
+              <span class="review-style-31">ไม่พบวันเวลาชัดเจน กรุณาตรวจสอบก่อนนำไปใช้</span>
             </template>
+            <template data-each="it.evidence" data-as="quote"><span class="review-evidence">อ้างอิง: “{{quote.text}}”</span></template>
           </button>
         </template>
       </div>
@@ -88,10 +100,9 @@
   <div class="review-style-32">
     <div class="review-style-33">{{hint}}</div>
     <div class="review-style-34">
-      <button type="button" data-on-click="{{reject}}" class="page-full-height review-style-35">ปฏิเสธ</button>
-      <button type="button" data-on-click="{{reprocess}}" class="page-full-height review-style-35">ประมวลผลใหม่</button>
-      <button type="button" class="page-full-height review-style-35">แก้ไขผลสรุป</button>
-      <button type="button" data-on-click="{{approve}}" class="page-full-height review-style-36">อนุมัติและเผยแพร่</button>
+      <button type="button" data-on-click="{{reject}}" disabled="{{actionDisabled}}" class="page-full-height review-style-35">ปฏิเสธ</button>
+      <button type="button" data-on-click="{{reprocess}}" disabled="{{busy}}" class="page-full-height review-style-35">ประมวลผลใหม่</button>
+      <button type="button" data-on-click="{{approve}}" disabled="{{actionDisabled}}" class="page-full-height review-style-36">{{approveLabel}}</button>
     </div>
   </div>
 </div>

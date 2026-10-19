@@ -7,6 +7,14 @@ class Component extends PageLogic {
     this.state={tab:'all',users:[],loading:true,error:''};
   }
   async componentDidMount() {
+    if(this.props.demo){
+      this.setState({loading:false,users:[
+        {id:'demo-admin',name:'ผู้ดูแลระบบตัวอย่าง',email:'admin@example.test',role:'admin',status:'active',fac:'ส่วนกลาง',br:'ผู้ดูแลระบบ',self:true},
+        {id:'demo-advisor',name:'อาจารย์ตัวอย่าง',email:'advisor@example.test',role:'advisor',status:'active',fac:'คณะวิทยาศาสตร์',br:'วิทยาการคอมพิวเตอร์'},
+        {id:'demo-student',name:'นักศึกษาตัวอย่าง',email:'student@example.test',role:'student',status:'pending',fac:'คณะวิทยาศาสตร์',br:'วิทยาการคอมพิวเตอร์'}
+      ]});
+      return;
+    }
     try {
       const users=await SummaAuth.listUsers();
       this.setState({users:users.map(user=>({...user,self:user.id===SummaAuth.state.user.uid || user.role==='admin'})),loading:false});
@@ -15,7 +23,7 @@ class Component extends PageLogic {
   renderVals() {
     const S = this.state;
     const th = (a, b) => a.localeCompare(b, 'th');
-    const upd = async (id, patch) => { try { await SummaAuth.updateUser(id, patch); this.setState({ users: this.state.users.map((u) => (u.id === id ? { ...u, ...patch } : u)), error: '' }); } catch(error) { this.setState({error: SummaPolicy.errorMessage(error)}); } };
+    const upd = async (id, patch) => { try { if(!this.props.demo)await SummaAuth.updateUser(id, patch); this.setState({ users: this.state.users.map((u) => (u.id === id ? { ...u, ...patch } : u)), error: '' }); } catch(error) { this.setState({error: SummaPolicy.errorMessage(error)}); } };
     const stCol = { active: ['#DDF1E8', '#0F5A3F', 'ใช้งานอยู่'], pending: ['#FFF4C2', '#5C4300', 'รอเปิดใช้งาน'], suspended: ['#F6DDDD', '#8A1F1F', 'ถูกระงับ'] };
     const tabDefs = [['all', 'ทั้งหมด'], ['pending', 'รอเปิดใช้งาน'], ['student', 'นักศึกษา'], ['advisor', 'อาจารย์ที่ปรึกษา'], ['admin', 'ผู้ดูแลระบบ']];
     const match = (u, t) => t === 'all' || (t === 'pending' ? u.status === 'pending' : u.role === t);
