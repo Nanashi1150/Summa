@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ติดตามความคืบหน้า | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/student.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/student.js"></script>
+</head>
+<body data-page="student" data-role="student" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template"><p class="page-feedback demo-notice">โหมดตัวอย่างโครงงาน: การอนุมัติ งาน และนัดหมายในหน้านี้ยังไม่เปลี่ยนข้อมูลโครงงานจริง</p>
+
+<div class="page-full-height student-style-1">
+
+
+
+<div class="responsive-page-padding student-style-2">
+
+  <div class="student-style-3">
+    <div class="student-style-4">
+      <h1 class="student-style-5">โครงงาน CS-01</h1>
+      <div class="student-style-6">ระบบสรุปข้อเสนอแนะและนัดหมายอาจารย์ที่ปรึกษาด้วย AI</div>
+      <div class="student-style-7">อาจารย์ที่ปรึกษา อาจารย์นุจรินทร์ ปทุมพงษ์ · ตัวอย่างข้อมูล</div>
+    </div>
+    <a href="reports.html" class="page-full-height student-style-8">ดูรายงานและ Infographic</a>
+  </div>
+
+  <div class="student-style-9">
+    <div class="student-style-10">ส่งเรื่องถึงอาจารย์ทาง Gmail ตามปกติ แล้วมาติดตามผลที่นี่ ใส่รหัสโครงงานและช่วงงานไว้ในหัวเรื่อง เพื่อให้ Summa จัดเข้าช่วงที่ถูกต้อง</div>
+    <div class="student-style-11">[CS-01] ขอนัดปรึกษา 60%</div>
+  </div>
+
+  <!-- stages -->
+  <div class="student-style-12">
+    <template data-each="stages" data-as="s">
+      <button type="button" data-on-click="{{s.pick}}" aria-pressed="{{s.on}}" style="border:2px solid {{s.border}}" class="student-style-13">
+        <div style="background:{{s.bar}}" class="student-style-14"></div>
+        <div class="student-style-15">
+          <div class="student-style-16">{{s.label}}</div>
+          <div style="background:{{s.cbg}};color:{{s.cfg}}" class="student-style-17">{{s.state}}</div>
+          <div class="student-style-18">{{s.date}}</div>
+        </div>
+      </button>
+    </template>
+  </div>
+
+  <!-- detail -->
+  <div class="student-style-19">
+
+    <div class="student-style-20">
+      <h2 class="student-style-21">ช่วง {{selLabel}}: สิ่งที่อาจารย์ให้ไว้</h2>
+      <template data-if="noFeedback">
+        <div class="student-style-22">ยังไม่ถึงช่วงนี้ เมื่อส่งอีเมลที่ระบุ {{selLabel}} ในหัวเรื่อง ข้อเสนอแนะที่อาจารย์อนุมัติแล้วจะแสดงที่นี่</div>
+      </template>
+      <template data-each="feedback" data-as="f">
+        <div class="student-style-23">
+          <div class="student-style-24">{{f.text}}</div>
+          <div class="student-style-25"><span class="student-style-26">{{f.quote}}</span></div>
+          <div class="student-style-27">ข้อความต้นฉบับส่วนที่อาจารย์อนุญาตให้เห็น · อนุมัติ {{f.date}}</div>
+        </div>
+      </template>
+
+      <template data-if="hasTasks">
+        <h2 class="student-style-28">งานในช่วงนี้</h2>
+        <div class="student-style-29">คลิกสถานะเพื่อเปลี่ยน แล้วแนบหลักฐานเมื่อทำเสร็จ</div>
+        <div class="student-style-30">
+          <template data-each="tasks" data-as="t">
+            <div style="border-top:{{t.top}}" class="student-style-31">
+              <div class="student-style-32">
+                <div style="text-decoration:{{t.deco}}" class="student-style-24">{{t.title}}</div>
+                <div class="student-style-33">{{t.due}}</div>
+              </div>
+              <div class="student-style-34">
+                <button type="button" class="page-full-height student-style-35">แนบหลักฐาน</button>
+                <button type="button" data-on-click="{{t.cycle}}" style="background:{{t.bg}};color:{{t.fg}}" class="page-full-height student-style-36">{{t.status}}</button>
+              </div>
+            </div>
+          </template>
+        </div>
+      </template>
+
+      <template data-if="hasAppt">
+        <div style="background:{{apptBg}}" class="student-style-37">
+          <div class="student-style-38">
+            <div class="student-style-39">{{apptLabel}}</div>
+            <div class="student-style-40">พฤหัสบดีที่ 29 ตุลาคม 2569 · 13:30 น.</div>
+            <div class="student-style-41">ห้องพักอาจารย์</div>
+          </div>
+          <template data-if="pendingAppt">
+            <div class="student-style-42">
+              <button type="button" data-on-click="{{declineAppt}}" class="page-full-height student-style-43">ขอเวลาอื่น</button>
+              <button type="button" data-on-click="{{confirmAppt}}" class="page-full-height student-style-44">ยืนยันนัดหมาย</button>
+            </div>
+          </template>
+        </div>
+      </template>
+    </div>
+
+    <div class="student-style-45">
+      <h2 class="student-style-21">เรื่องที่ส่งทาง Gmail</h2>
+      <template data-if="noMail">
+        <div class="student-style-22">ยังไม่มีอีเมลในช่วงนี้</div>
+      </template>
+      <template data-each="mails" data-as="m">
+        <div class="student-style-46">
+          <div class="student-style-47">{{m.subject}}</div>
+          <div class="student-style-33">ส่งเมื่อ {{m.date}}</div>
+          <div class="student-style-48">
+            <template data-each="m.steps" data-as="p">
+              <div class="student-style-49">
+                <div class="student-style-50">
+                  <div style="background:{{p.lineL}}" class="student-style-51"></div>
+                  <div style="background:{{p.dot}}" class="student-style-52"></div>
+                  <div style="background:{{p.lineR}}" class="student-style-51"></div>
+                </div>
+                <div style="font-weight:{{p.weight}};color:{{p.fg}}" class="student-style-53">{{p.label}}</div>
+              </div>
+            </template>
+          </div>
+          <div class="student-style-54">{{m.note}}</div>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

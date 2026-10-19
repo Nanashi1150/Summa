@@ -1,0 +1,244 @@
+body {
+  margin: 0;
+  background: #F4F6F8;
+}
+a {
+  color: #101A2E;
+}
+a:hover {
+  color: #176B4D;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+.review-style-1 {
+  min-height: 1180px;
+  background: #F4F6F8;
+  color: #101A2E;
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.review-style-2 {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 1114px;
+}
+.review-style-3 {
+  flex: 0 0 300px;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: #fff;
+  border-right: 1px solid #D3DAE3;
+  padding: 28px 20px;
+}
+.review-style-4 {
+  font-size: 14px;
+  color: #566275;
+  margin-bottom: 10px;
+}
+.review-style-5 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.review-style-6 {
+  padding: 12px 14px;
+  border-radius: 8px;
+}
+.review-style-7 {
+  font-weight: 600;
+  font-size: 15px;
+}
+.review-style-8 {
+  font-size: 14px;
+  color: #2B374D;
+}
+.review-style-9 {
+  font-size: 13px;
+  color: #566275;
+  margin-top: 2px;
+}
+.review-style-10 {
+  flex: 1 1 640px;
+  min-width: 0;
+  padding: 32px 40px 48px;
+  box-sizing: border-box;
+}
+.review-style-11 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.review-style-12 {
+  min-width: 0;
+}
+.review-style-13 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.review-style-14 {
+  margin-top: 6px;
+  color: #566275;
+  font-size: 15px;
+}
+.review-style-15 {
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.review-style-16 {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+}
+.review-style-17 {
+  flex: 1 1 380px;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.review-style-18 {
+  padding: 14px 24px;
+  border-bottom: 1px solid #D3DAE3;
+  font-weight: 600;
+}
+.review-style-19 {
+  padding: 14px 24px;
+  border-bottom: 1px solid #D3DAE3;
+  font-size: 14px;
+  color: #566275;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+}
+.review-style-20 {
+  padding: 24px;
+  font-family: "Noto Serif Thai", serif;
+  font-size: 17px;
+  line-height: 2.05;
+}
+button.review-style-21 {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  padding: 2px 3px;
+  margin: 0;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 3px;
+}
+.review-style-22 {
+  margin: 20px 0 0;
+  font-size: 15px;
+  color: #566275;
+  font-family: "IBM Plex Sans Thai", sans-serif;
+}
+.review-style-23 {
+  padding: 14px 24px;
+  border-bottom: 1px solid #D3DAE3;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+}
+.review-style-24 {
+  font-weight: 400;
+  color: #566275;
+  font-size: 14px;
+}
+.review-style-25 {
+  padding: 20px 24px 8px;
+  color: #2B374D;
+}
+.review-style-26 {
+  padding: 12px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+button.review-style-27 {
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  padding: 14px 18px;
+  border-radius: 8px;
+  color: #101A2E;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.review-style-28 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2B374D;
+}
+.review-style-29 {
+  font-weight: 500;
+}
+.review-style-30 {
+  font-size: 15px;
+  color: #2B374D;
+}
+.review-style-31 {
+  font-size: 14px;
+  color: #8A4B00;
+  font-weight: 500;
+}
+.review-style-32 {
+  margin-top: 28px;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  justify-content: space-between;
+}
+.review-style-33 {
+  flex: 1 1 280px;
+  min-width: 0;
+  color: #2B374D;
+  font-size: 15px;
+}
+.review-style-34 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+button.review-style-35 {
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #fff;
+  color: #101A2E;
+}
+button.review-style-36 {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 24px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #FFE066;
+  color: #101A2E;
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>หน้าแรก | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/index.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/index.js"></script>
+</head>
+<body data-page="index" data-role="public" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template">
+
+<div class="index-style-1">
+
+<!-- HERO -->
+<div class="responsive-page-padding index-style-2">
+  <div class="index-style-3">
+    <h1 class="index-style-4">ข้อเสนอแนะของอาจารย์ ไม่หายไปกับแชต</h1>
+    <p class="index-style-5">Summa อ่านอีเมลระหว่างนักศึกษากับอาจารย์ที่ปรึกษา แล้วสรุปเป็นรายการงาน กำหนดส่ง และนัดหมาย อาจารย์ตรวจกับข้อความต้นฉบับก่อน นักศึกษาจึงเห็นเฉพาะสิ่งที่อนุมัติแล้ว</p>
+    <div class="index-style-6">
+      <a href="login.html" class="page-full-height index-style-7">เข้าสู่ระบบ</a>
+      <a href="register.html" class="page-full-height index-style-8">สมัครสมาชิก</a>
+    </div>
+  </div>
+
+  <!-- live demo -->
+  <div class="index-style-9">
+    <div class="index-style-10">
+      <div class="index-style-11">
+        <span>อีเมลต้นฉบับจากอาจารย์</span><span>ตัวอย่างข้อมูล</span>
+      </div>
+      <div class="index-style-12">
+        <template data-each="segments" data-as="s">
+          <template data-if="s.isHl">
+            <button type="button" data-on-click="{{s.pick}}" style="background:{{s.bg}}" class="index-style-13">{{s.text}}</button>
+          </template>
+          <template data-if="s.isPlain"><span>{{s.text}}</span></template>
+        </template>
+      </div>
+    </div>
+    <div class="index-style-14">Summa สรุปได้ 3 รายการ คลิกเพื่อดูว่าอ่านมาจากประโยคไหน</div>
+    <div class="index-style-15">
+      <template data-each="items" data-as="it">
+        <button type="button" data-on-click="{{it.pick}}" style="border:1.5px solid {{it.border}};background:{{it.bg}}" class="index-style-16">
+          <span class="index-style-17">{{it.kind}}</span>
+          <span class="index-style-18">{{it.title}}</span>
+          <span class="index-style-19">{{it.meta}}</span>
+        </button>
+      </template>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<div class="index-style-20">
+  <div class="index-style-21">
+    <div class="index-style-22">
+      <h2 class="index-style-23">คำแนะนำกระจายอยู่ใน LINE, Messenger และอีเมล</h2>
+      <p class="index-style-24">ช่องทางเหล่านี้ไม่ได้ออกแบบมาเพื่อติดตามโครงงาน ข้อเสนอแนะบางข้อจึงตกหล่น และอาจารย์ต้องไล่ค้นประวัติเองเมื่อถึงรอบสอบความก้าวหน้า</p>
+    </div>
+    <div class="index-style-25">
+      <template data-each="compare" data-as="c">
+        <div class="index-style-26">
+          <div class="index-style-27">{{c.before}}</div>
+          <div class="index-style-28">{{c.after}}</div>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+
+<!-- HOW -->
+<div id="how" class="index-style-29">
+  <h2 class="index-style-30">จากอีเมลหนึ่งฉบับ ถึงรายการงานที่ติดตามได้</h2>
+  <div class="index-style-31">
+    <template data-each="steps" data-as="st">
+      <div style="background:{{st.bg}};color:{{st.fg}};border:1px solid {{st.line}}" class="index-style-32">
+        <div style="color:{{st.numColor}}" class="index-style-33">ขั้นที่ {{st.n}}</div>
+        <div class="index-style-34">{{st.title}}</div>
+        <div style="color:{{st.sub}}" class="index-style-35">{{st.body}}</div>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- ROLES -->
+<div id="roles" class="index-style-20">
+  <div class="index-style-36">
+    <h2 class="index-style-23">แต่ละบทบาทเห็นและทำได้ต่างกัน</h2>
+    <div class="index-style-37">
+      <template data-each="tabs" data-as="t">
+        <button type="button" data-on-click="{{t.pick}}" style="background:{{t.bg}};color:{{t.fg}}" class="page-full-height index-style-38">{{t.label}}</button>
+      </template>
+    </div>
+    <div class="index-style-39">
+      <div class="index-style-40">
+        <h3 class="index-style-41">{{roleTitle}}</h3>
+        <p class="index-style-42">{{roleNote}}</p>
+        <a href="{{roleLink}}" class="index-style-43">{{roleLinkText}}</a>
+      </div>
+      <ul class="index-style-44">
+        <template data-each="roleItems" data-as="r">
+          <li class="index-style-45">{{r}}</li>
+        </template>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST -->
+<div id="trust" class="index-style-29">
+  <h2 class="index-style-30">AI ช่วยอ่าน อาจารย์เป็นผู้ตัดสิน</h2>
+  <div class="index-style-46">
+    <template data-each="trust" data-as="tr">
+      <div class="index-style-47">
+        <svg width="40" height="6" viewBox="0 0 40 6" aria-hidden="true"><rect width="40" height="6" fill="#FFE066"></rect></svg>
+        <h3 class="index-style-48">{{tr.title}}</h3>
+        <p class="index-style-49">{{tr.body}}</p>
+      </div>
+    </template>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="index-style-50">
+  <div class="index-style-51">
+    <div class="index-style-22">
+      <div class="index-style-52">พร้อมให้โครงงานมีประวัติที่ตรวจสอบได้</div>
+      <div class="index-style-53">เข้าสู่ระบบด้วยบัญชีที่ผู้ดูแลระบบอนุญาต</div>
+    </div>
+    <a href="login.html" class="page-full-height index-style-54">เข้าสู่ระบบ</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="index-style-55">
+  <div class="index-style-22">โครงงาน CS-01 · การพัฒนาระบบอัตโนมัติสำหรับสรุปข้อเสนอแนะและนัดหมายอาจารย์ที่ปรึกษาโครงงานผ่านอีเมล์โดยใช้ปัญญาประดิษฐ์</div>
+  <div class="index-style-47">ผู้รับผิดชอบโครงการ กรวิชญ์ กิจภิญโญ<br>อาจารย์ที่ปรึกษา อาจารย์นุจรินทร์ ปทุมพงษ์</div>
+</div>
+
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

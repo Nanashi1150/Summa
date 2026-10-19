@@ -1,6 +1,6 @@
 const {JSDOM,VirtualConsole}=require('jsdom');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const policy=require('../src/js/auth-policy.js');
+const policy=require('../src/services/auth-policy.js');
 const root=path.resolve(__dirname,'..','public');
 const names=['index','review','student','imports','login','register','projects','gmail','users','admin-projects','integrations','logs','navbar','project-tree','reports','manual-import'];
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
@@ -13,21 +13,24 @@ async function open(name,options={}) {
  const calls=[];
  const mockUsers=[{id:'uid-admin',name:'Admin',email:'admin@example.test',role:'admin',status:'active',fac:'ส่วนกลาง',br:'ผู้ดูแลระบบ'},
    {id:'uid-pending',name:'Pending student',email:'student@example.test',role:'student',status:'pending',fac:'คณะวิทยาศาสตร์',br:'วิทยาการคอมพิวเตอร์'}];
+ let resolveUsers;
+ const usersResult=options.deferUsers?new Promise(resolve=>{resolveUsers=resolve;}):Promise.resolve(mockUsers);
  // This fake service exists only in tests; production always loads the Firebase SDK bundle.
  dom.window.SummaAuth={get state(){return state;},ready:Promise.resolve(),
    login:async(email,password)=>{calls.push({action:'login',email,password});if(options.loginError)throw {code:options.loginError};return {ready:true,user:{uid:'real-user'},profile:{role:options.loginRole || 'admin',status:'active'}};},
    googleLogin:async()=>({ready:true,user:{uid:'google-user'},profile:{role:'advisor',status:'active'}}),
    resetPassword:async email=>calls.push({action:'reset',email}),
    register:async values=>{calls.push({action:'register',values});if(options.registerError)throw {code:options.registerError};},
-   listUsers:async()=>mockUsers,updateUser:async(id,patch)=>{calls.push({action:'updateUser',id,patch});}
+   listUsers:()=>usersResult,updateUser:async(id,patch)=>{calls.push({action:'updateUser',id,patch});}
  };
  for(const script of dom.window.document.querySelectorAll('script[src]')) {
-   if(script.getAttribute('src')==='assets/firebase.bundle.js')continue;
+   if(script.getAttribute('src')==='assets/services/firebase.bundle.js')continue;
    dom.window.eval(fs.readFileSync(path.join(root,script.getAttribute('src')),'utf8'));
  }
  const destinations=[];dom.window.Summa.navigate=url=>destinations.push(url);
  dom.window.document.dispatchEvent(new dom.window.Event('DOMContentLoaded'));await tick();
  dom.calls=calls;dom.destinations=destinations;dom.errors=errors;
+ dom.completeUsers=()=>resolveUsers?.(mockUsers);
  dom.setSession=next=>{state=next;dom.window.dispatchEvent(new dom.window.Event('summa:auth'));};
  assert.deepEqual(errors.map(error=>error.message),[],name+' runtime errors');return dom;
 }
@@ -46,6 +49,7 @@ function confirm(dom,accept){const target=dom.window.document.querySelector(`[da
  for(const name of names.filter(name=>!policy.publicPages.includes(name))){const dom=await open(name,{role:null});assert.ok(dom.window.document.querySelector('.access-guard'));assert.equal(dom.window.document.querySelectorAll('#page-root button,#page-root input').length,0);assert.equal(dom.calls.length,0);dom.window.close();}
  for(const status of ['pending','suspended']){const dom=await open('users',{role:'admin',status});assert.ok(dom.window.document.querySelector('.access-guard'));assert.equal(dom.calls.length,0);dom.window.close();}
  let dom=await open('review',{role:'student'});assert.ok(dom.window.document.querySelector('.access-guard'));dom.window.close();
+ dom=await open('users',{deferUsers:true});dom.setSession({ready:true,user:null,profile:null});dom.completeUsers();await tick();assert.ok(dom.window.document.querySelector('.access-guard'));assert.ok(!text(dom).includes('Pending student'));dom.window.close();
  dom=await open('review');button(dom,'อนุมัติและเผยแพร่');assert.ok(dom.window.document.querySelector('dialog'));assert.ok(!text(dom).includes('เผยแพร่แล้ว'));confirm(dom,false);await tick();assert.ok(!text(dom).includes('เผยแพร่แล้ว'));button(dom,'อนุมัติและเผยแพร่');confirm(dom,true);await tick();assert.match(text(dom),/เผยแพร่แล้ว/);dom.window.close();
  dom=await open('review');button(dom,'อนุมัติและเผยแพร่');dom.setSession({ready:true,user:null,profile:null});confirm(dom,true);await tick();assert.ok(dom.window.document.querySelector('.access-guard'));assert.equal(dom.window.sessionStorage.length,0);dom.window.close();
  dom=await open('student');button(dom,'ยืนยันนัดหมาย');confirm(dom,false);await tick();assert.ok(!text(dom).includes('ยืนยันนัดหมายแล้ว'));button(dom,'ยืนยันนัดหมาย');confirm(dom,true);await tick();assert.match(text(dom),/ยืนยันนัดหมายแล้ว/);dom.window.close();

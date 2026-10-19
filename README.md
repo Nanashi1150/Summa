@@ -18,11 +18,14 @@ npm start
 ```text
 Summa/
 ├── src/
-│   ├── js/                 # เมนู การแสดงผล การตรวจสิทธิ์ ฟอร์ม และ Firebase SDK entry
-│   ├── styles/             # CSS ส่วนกลาง
-│   └── templates/          # HTML ต้นฉบับของหน้าล็อกอิน
+│   ├── pages/              # HTML ต้นฉบับแยกครบ 16 หน้า
+│   ├── js/                 # JavaScript รายหน้า และ app.js สำหรับ renderer/สิทธิ์
+│   ├── styles/             # CSS รายหน้า, shared.css และ fonts.css
+│   ├── components/         # Navbar, ป๊อปอัป และรายการโครงงานที่ใช้ร่วมกัน
+│   ├── services/           # Firebase, login/session, ผู้ใช้ และนโยบายสิทธิ์
+│   └── media/              # ฟอนต์และใบอนุญาต
 ├── design/
-│   └── original.html       # ไฟล์ต้นฉบับแบบรวม เก็บเนื้อหาเดิมครบ
+│   └── original.html       # เก็บต้นฉบับเพื่ออ้างอิง ไม่ใช้ในการ build
 ├── config/
 │   └── firebase/
 │       └── firestore.rules # กฎสิทธิ์ Cloud Firestore
@@ -48,17 +51,21 @@ npm run test:rules
 
 `build` สร้าง HTML, CSS, JavaScript และฟอนต์ลง `public/` ส่วน `build:vercel` ตรวจว่ามีครบ 16 หน้าและลิงก์ไฟล์ทั้งหมดถูกต้องด้วย
 
-`npm test` ใช้ jsdom และบริการบัญชีจำลอง ตรวจสิทธิ์ผู้เยี่ยมชม บทบาท บัญชีรออนุมัติ/ถูกระงับ ฟอร์มบัญชี และการยืนยัน/ยกเลิกป๊อปอัป ไม่ใช่การตรวจภาพในเบราว์เซอร์จริง
+`npm test` ตรวจว่าแก้ HTML/CSS/JavaScript รายหน้าแล้ว build ได้โดยไม่ต้องมีไฟล์ design เดิม และใช้ jsdom กับบริการบัญชีจำลองตรวจสิทธิ์ผู้เยี่ยมชม บทบาท บัญชีรออนุมัติ/ถูกระงับ ฟอร์มบัญชี และการยืนยัน/ยกเลิกป๊อปอัป ไม่ใช่การตรวจภาพในเบราว์เซอร์จริง
 
 `test:rules` ใช้ Firestore Emulator กับโปรเจกต์ `demo-summa` ไม่แก้ไขข้อมูล Firebase จริง ต้องมี Java 21 ขึ้นไปและอินเทอร์เน็ตสำหรับดาวน์โหลด emulator ครั้งแรก
 
 ## การแก้ไขหน้าเว็บ
 
-แก้ JavaScript ส่วนกลางใน `src/js/`, CSS ใน `src/styles/` และหน้าล็อกอินใน `src/templates/login.html` พฤติกรรมฟอร์มบัญชีอยู่ที่ `src/js/auth-forms.js` และการเชื่อม Firebase อยู่ที่ `src/js/firebase-client.js`
+แต่ละหน้าแก้ได้โดยตรงในไฟล์ชื่อเดียวกัน เช่น หน้าโครงงานใช้งาน `src/pages/projects.html`, `src/styles/projects.css` และ `src/js/projects.js` จากนั้นรัน `npm run build` แล้วรีเฟรช local server
 
-หน้าที่เหลือแยกจาก `design/original.html` ผ่าน `scripts/build.cjs` ให้แก้กระบวนการแปลงในสคริปต์นี้เมื่อต้องการรักษาการปรับแต่งไว้ การแก้ `public/` โดยตรงจะถูกเขียนทับเมื่อ build ใหม่
+หน้าต่าง ๆ ไม่ได้สร้างจากไฟล์ design แบบรวมอีกแล้ว `scripts/build.cjs` คัดลอก source และนำ HTML ของ component ที่ใช้ร่วมกันมาใส่ตามเครื่องหมาย `<!-- component:project-tree -->` การแก้ `public/` โดยตรงยังถูกเขียนทับเมื่อ build ใหม่
 
-ฟอนต์ที่แยกจากต้นฉบับมีใบอนุญาตอยู่ใน `public/assets/FONT-LICENSE.txt` หลัง build
+Navbar อยู่ที่ `src/components/navbar.js`, ป๊อปอัปที่ `src/components/confirm-dialog.js` และรายการโครงงานใช้ `src/components/project-tree.html` กับ `src/components/project-tree.js` ส่วน `src/js/app.js` รองรับตัวแปร `{{name}}`, `<template data-each>` และ `<template data-if>` ด้วย DOM API โดยไม่ใช้ไลบรารีของไฟล์ design เดิม
+
+Firebase config อยู่ที่ `src/services/firebase.js`, การเข้าสู่ระบบและ session ที่ `src/services/auth.js`, บริการผู้ใช้ที่ `src/services/users.js` และนโยบายสิทธิ์ที่ `src/services/auth-policy.js` ตัว SDK bundle สร้างจาก `src/services/index.js`
+
+CSS ส่วนคงที่แยกไว้ในไฟล์รายหน้า ส่วนค่า style ที่เปลี่ยนตามสถานะ เช่น สีรายการที่เลือก ยังผูกกับข้อมูลใน HTML ฟอนต์และใบอนุญาตอยู่ใน `src/media/` และถูกคัดลอกไปที่ `public/assets/media/`
 
 ## หน้าของระบบ
 
@@ -79,6 +86,7 @@ npm run test:rules
 
 - [ตั้งค่า Firebase และสร้างผู้ดูแลคนแรก](docs/FIREBASE-SETUP.md)
 - [Deploy บน Vercel](docs/DEPLOYMENT.md)
+- [วิธีแก้ไข HTML/CSS/JavaScript รายหน้า](docs/DEVELOPMENT.md)
 
 การล็อกอิน สมัครสมาชิก ตั้งรหัสผ่านใหม่ และจัดการบัญชีผู้ใช้เชื่อม Firebase ในโค้ดแล้ว ต้องเปิดบริการและ publish rules ก่อนใช้จริง ส่วนข้อมูลโครงงาน งาน นัดหมาย Gmail และ Ollama/OCR ยังเป็นตัวอย่าง มีป้ายกำกับในหน้าโครงงาน
 

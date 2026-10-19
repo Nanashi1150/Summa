@@ -11,9 +11,9 @@ for(const name of fs.readdirSync(root).filter(name=>name.endsWith('.html'))) {
   const html=fs.readFileSync(path.join(root,name),'utf8');
   for(const match of html.matchAll(/(?:src|href)="([^"]+)"/g))verify(match[1],root);
 }
-for(const name of fs.readdirSync(path.join(root,'assets/pages')).filter(name=>name.endsWith('.css'))) {
-  const css=fs.readFileSync(path.join(root,'assets/pages',name),'utf8');
-  for(const match of css.matchAll(/url\(['"]?([^)'"\s]+)['"]?\)/g))verify(match[1],path.join(root,'assets/pages'));
+for(const name of fs.readdirSync(path.join(root,'assets/styles')).filter(name=>name.endsWith('.css'))) {
+  const css=fs.readFileSync(path.join(root,'assets/styles',name),'utf8');
+  for(const match of css.matchAll(/url\(['"]?([^)'"\s]+)['"]?\)/g))verify(match[1],path.join(root,'assets/styles'));
 }
 assert.equal(fs.readdirSync(root).filter(name=>name.endsWith('.html')).length,16);
 assert.deepEqual(fs.readdirSync(root).filter(name=>!name.endsWith('.html')),['assets']);

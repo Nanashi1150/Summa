@@ -1,0 +1,354 @@
+body {
+  margin: 0;
+  background: #F4F6F8;
+}
+a {
+  color: #101A2E;
+}
+a:hover {
+  color: #176B4D;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+.student-style-1 {
+  min-height: 1400px;
+  background: #F4F6F8;
+  color: #101A2E;
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.student-style-2 {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 40px 64px;
+  box-sizing: border-box;
+}
+.student-style-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.student-style-4 {
+  min-width: 0;
+  flex: 1 1 420px;
+}
+.student-style-5 {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.student-style-6 {
+  margin-top: 4px;
+  color: #2B374D;
+}
+.student-style-7 {
+  margin-top: 2px;
+  color: #566275;
+  font-size: 15px;
+}
+.student-style-8 {
+  text-decoration: none;
+  font-weight: 500;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 9px 22px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #fff;
+  color: #101A2E;
+}
+.student-style-9 {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  align-items: center;
+}
+.student-style-10 {
+  flex: 1 1 360px;
+  min-width: 0;
+  color: #2B374D;
+}
+.student-style-11 {
+  flex: 0 1 auto;
+  font-family: "Noto Serif Thai", serif;
+  background: #FFF4C2;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 15px;
+}
+.student-style-12 {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+button.student-style-13 {
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  flex: 1 1 220px;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0;
+  border-radius: 10px;
+  background: #fff;
+  color: #101A2E;
+  overflow: hidden;
+}
+.student-style-14 {
+  height: 8px;
+}
+.student-style-15 {
+  padding: 16px 20px 18px;
+}
+.student-style-16 {
+  font-size: 38px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.student-style-17 {
+  margin-top: 8px;
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.student-style-18 {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #566275;
+}
+.student-style-19 {
+  margin-top: 36px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  align-items: flex-start;
+}
+.student-style-20 {
+  flex: 1.3 1 460px;
+  min-width: 0;
+}
+.student-style-21 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.student-style-22 {
+  margin-top: 16px;
+  padding: 24px;
+  background: #fff;
+  border: 1px dashed #8895A8;
+  border-radius: 10px;
+  color: #2B374D;
+}
+.student-style-23 {
+  margin-top: 16px;
+  padding: 18px 22px;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+}
+.student-style-24 {
+  font-weight: 500;
+}
+.student-style-25 {
+  margin-top: 8px;
+  font-family: "Noto Serif Thai", serif;
+  font-size: 15px;
+  line-height: 1.9;
+  color: #2B374D;
+}
+.student-style-26 {
+  background: #FFF4C2;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.student-style-27 {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #566275;
+}
+.student-style-28 {
+  margin: 32px 0 0;
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.student-style-29 {
+  margin-top: 6px;
+  color: #566275;
+  font-size: 15px;
+}
+.student-style-30 {
+  margin-top: 12px;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+}
+.student-style-31 {
+  padding: 16px 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+.student-style-32 {
+  flex: 1 1 240px;
+  min-width: 0;
+}
+.student-style-33 {
+  font-size: 14px;
+  color: #566275;
+}
+.student-style-34 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+button.student-style-35 {
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1.5px solid #D3DAE3;
+  background: #fff;
+  color: #101A2E;
+}
+button.student-style-36 {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  min-width: 104px;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+}
+.student-style-37 {
+  margin-top: 24px;
+  border: 1.5px solid #101A2E;
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  justify-content: space-between;
+}
+.student-style-38 {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+.student-style-39 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.student-style-40 {
+  margin-top: 2px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.student-style-41 {
+  color: #2B374D;
+  font-size: 15px;
+}
+.student-style-42 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+button.student-style-43 {
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #fff;
+  color: #101A2E;
+}
+button.student-style-44 {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 24px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #101A2E;
+  color: #fff;
+}
+.student-style-45 {
+  flex: 1 1 340px;
+  min-width: 0;
+}
+.student-style-46 {
+  margin-top: 16px;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+}
+.student-style-47 {
+  font-weight: 500;
+  font-family: "Noto Serif Thai", serif;
+  font-size: 15px;
+}
+.student-style-48 {
+  margin-top: 14px;
+  display: flex;
+  gap: 0;
+}
+.student-style-49 {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+}
+.student-style-50 {
+  height: 10px;
+  display: flex;
+  align-items: center;
+}
+.student-style-51 {
+  flex: 1;
+  height: 3px;
+}
+.student-style-52 {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  border: 2px solid #101A2E;
+}
+.student-style-53 {
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.student-style-54 {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #2B374D;
+}

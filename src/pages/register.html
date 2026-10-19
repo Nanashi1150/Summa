@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>สมัครสมาชิก | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/register.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/register.js"></script>
+</head>
+<body data-page="register" data-role="public" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template">
+
+<div class="page-full-height register-style-1">
+  <div class="responsive-page-padding register-style-2">
+    <a href="index.html" class="register-style-3">
+      <svg width="26" height="26" viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="6" fill="#101A2E"></rect><rect x="6" y="17" width="16" height="5" fill="#FFE066"></rect><rect x="6" y="6" width="11" height="3" fill="#F4F6F8"></rect><rect x="6" y="11" width="16" height="3" fill="#F4F6F8"></rect></svg>
+      Summa
+    </a>
+    <div class="register-style-4">มีบัญชีแล้ว <a href="login.html" class="register-style-5">เข้าสู่ระบบ</a></div>
+  </div>
+
+  <div class="register-style-6">
+
+    <div class="register-style-7">
+      <h1 class="register-style-8">สมัครสมาชิก</h1>
+      <p class="register-style-9">เลือกบทบาทและกรอกข้อมูลสังกัด ผู้ดูแลระบบจะตรวจสอบก่อนเปิดใช้งานบัญชี</p>
+      <ol class="register-style-10">
+        <li>ส่งคำขอสมัคร</li>
+        <li>ผู้ดูแลระบบตรวจสอบและเปิดใช้งาน</li>
+        <li>เข้าสู่ระบบ (อาจารย์เชื่อมต่อ Gmail ต่อได้ทันที)</li>
+      </ol>
+    </div>
+
+    <div class="register-style-11">
+      <template data-if="done">
+        <div role="status" class="register-style-12">
+          <div class="register-style-13">ส่งคำขอสมัครแล้ว</div>
+          <p class="register-style-14">ผู้ดูแลระบบจะตรวจสอบข้อมูลของ {{name}} และเปิดใช้งานบัญชี คุณจะได้รับอีเมลแจ้งเมื่อพร้อมเข้าสู่ระบบ</p>
+          <a href="login.html" class="register-style-15">กลับไปหน้าเข้าสู่ระบบ</a>
+        </div>
+      </template>
+      <template data-if="notDone">
+        <div>
+          <template data-if="hasError">
+            <div role="alert" class="register-style-16">{{error}}</div>
+          </template>
+
+          <div class="register-style-17">บทบาท</div>
+          <div class="register-style-18">
+            <template data-each="roles" data-as="r">
+              <button type="button" data-on-click="{{r.pick}}" aria-pressed="{{r.on}}" style="background:{{r.bg}};color:{{r.fg}}" class="page-full-height register-style-19">{{r.label}}</button>
+            </template>
+          </div>
+          <div class="register-style-20">บัญชีผู้ดูแลระบบสมัครเองไม่ได้ ผู้ดูแลที่มีอยู่แล้วเป็นผู้สร้างให้</div>
+
+          <div class="register-style-21">
+            <div class="register-style-22">
+              <label for="fn" class="register-style-23">ชื่อ</label>
+              <input id="fn" type="text" value="{{first}}" data-on-change="{{setFirst}}" class="page-full-height register-style-24">
+            </div>
+            <div class="register-style-22">
+              <label for="ln" class="register-style-23">นามสกุล</label>
+              <input id="ln" type="text" value="{{last}}" data-on-change="{{setLast}}" class="page-full-height register-style-24">
+            </div>
+          </div>
+
+          <div class="register-style-25">
+            <div class="register-style-22">
+              <label for="fac" class="register-style-23">คณะ</label>
+              <select id="fac" value="{{faculty}}" data-on-change="{{setFaculty}}" class="page-full-height register-style-26">
+                <option value="">เลือกคณะ</option>
+                <template data-each="faculties" data-as="f"><option value="{{f}}">{{f}}</option></template>
+              </select>
+            </div>
+            <div class="register-style-22">
+              <label for="br" class="register-style-23">สาขา</label>
+              <select id="br" value="{{branch}}" data-on-change="{{setBranch}}" class="page-full-height register-style-26">
+                <option value="">{{branchHint}}</option>
+                <template data-each="branches" data-as="b"><option value="{{b}}">{{b}}</option></template>
+              </select>
+            </div>
+          </div>
+
+          <template data-if="isStudent">
+            <div class="register-style-25">
+              <div class="register-style-22">
+                <label for="sid" class="register-style-23">รหัสนักศึกษา</label>
+                <input id="sid" type="text" inputmode="numeric" value="{{sid}}" data-on-change="{{setSid}}" class="page-full-height register-style-24">
+              </div>
+              <div class="register-style-27">ผู้ดูแลจะจับคู่คุณกับโครงงาน ภาคเรียน และอาจารย์ที่ปรึกษาให้</div>
+            </div>
+          </template>
+
+          <div class="register-style-28">
+            <label for="em" class="register-style-23">อีเมลมหาวิทยาลัย</label>
+            <input id="em" type="email" value="{{email}}" data-on-change="{{setEmail}}" placeholder="name@university.ac.th" class="page-full-height register-style-24">
+          </div>
+
+          <div class="register-style-25">
+            <div class="register-style-22">
+              <label for="p1" class="register-style-23">รหัสผ่าน</label>
+              <input id="p1" type="password" autocomplete="new-password" value="{{pw1}}" data-on-change="{{setPw1}}" class="page-full-height register-style-24">
+              <div class="register-style-29">อย่างน้อย 8 ตัวอักษร</div>
+            </div>
+            <div class="register-style-22">
+              <label for="p2" class="register-style-23">ยืนยันรหัสผ่าน</label>
+              <input id="p2" type="password" autocomplete="new-password" value="{{pw2}}" data-on-change="{{setPw2}}" class="page-full-height register-style-24">
+            </div>
+          </div>
+
+          <button type="button" data-on-click="{{submit}}" disabled="{{busy}}" class="page-full-height register-style-30">{{registerLabel}}</button>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

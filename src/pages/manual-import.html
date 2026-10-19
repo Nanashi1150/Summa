@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>นำเข้าจากภาพ | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/manual-import.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/manual-import.js"></script>
+</head>
+<body data-page="manual-import" data-role="advisor" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template">
+
+<div class="page-full-height manual-import-style-1">
+
+
+  <div class="responsive-page-padding manual-import-style-2">
+    <h1 class="manual-import-style-3">นำเข้าด้วยตนเองจากภาพ</h1>
+    <p class="manual-import-style-4">ใช้เมื่อเชื่อมต่อ Gmail ไม่ได้ หรือข้อความมาจากช่องทางอื่น นำภาพหน้าจอเข้ามา Ollama จะอ่านและกรอกข้อมูลให้ก่อน แล้วคุณตรวจและแก้ไขเองได้ · ตัวอย่างข้อมูล</p>
+
+    <div class="manual-import-style-5">
+
+      <!-- LEFT: data -->
+      <div class="manual-import-style-6">
+        <div class="manual-import-style-7">
+          <h2 class="manual-import-style-8">ข้อมูลที่ได้จากภาพ</h2>
+          <div style="background:{{bannerBg}};color:{{bannerFg}}" class="manual-import-style-9">{{bannerText}}</div>
+        </div>
+
+        <template data-if="isEmpty">
+          <div class="manual-import-style-10">ข้อมูลจะปรากฏที่นี่หลังนำภาพเข้ามา<br><span class="manual-import-style-11">ชื่อ-นามสกุล อีเมล รหัสโครงงาน หัวข้อ ภาคเรียน คณะ สาขา และอื่น ๆ</span></div>
+        </template>
+        <template data-if="isBusy">
+          <div role="status" class="manual-import-style-12">
+            <div class="manual-import-style-13">Ollama กำลังอ่านภาพ และจะกรอกข้อมูลให้</div>
+            <div class="manual-import-style-14"></div><div class="manual-import-style-14"></div><div class="manual-import-style-14"></div><div class="manual-import-style-14"></div>
+          </div>
+        </template>
+
+        <template data-if="showForm">
+          <div>
+            <div style="background:{{matchBg}}" class="manual-import-style-15">{{matchText}}</div>
+            <div class="manual-import-style-16">
+              <template data-each="fields" data-as="f">
+                <div style="flex:{{f.flex}}" class="manual-import-style-17">
+                  <div class="manual-import-style-18">
+                    <label for="{{f.id}}" class="manual-import-style-13">{{f.label}}</label>
+                    <span style="background:{{f.bbg}};color:{{f.bfg}}" class="manual-import-style-19">{{f.badge}}</span>
+                  </div>
+                  <template data-if="f.isText">
+                    <input id="{{f.id}}" type="text" value="{{f.value}}" data-on-change="{{f.set}}" style="border:1.5px solid {{f.line}}" class="page-full-height manual-import-style-20">
+                  </template>
+                  <template data-if="f.isSelect">
+                    <select id="{{f.id}}" value="{{f.value}}" data-on-change="{{f.set}}" style="border:1.5px solid {{f.line}}" class="page-full-height manual-import-style-21">
+                      <template data-each="f.options" data-as="o"><option value="{{o.v}}">{{o.t}}</option></template>
+                    </select>
+                  </template>
+                  <template data-if="f.isArea">
+                    <textarea id="{{f.id}}" rows="5" value="{{f.value}}" data-on-change="{{f.set}}" style="border:1.5px solid {{f.line}}" class="manual-import-style-22"></textarea>
+                  </template>
+                  <template data-if="f.hasHint"><div class="manual-import-style-23">{{f.hint}}</div></template>
+                </div>
+              </template>
+            </div>
+
+            <template data-if="hasError">
+              <div role="alert" class="manual-import-style-24">{{error}}</div>
+            </template>
+
+            <div class="manual-import-style-25">
+              <button type="button" data-on-click="{{save}}" class="page-full-height manual-import-style-26">บันทึกและส่งเข้าคิวสรุป</button>
+              <button type="button" data-on-click="{{rerun}}" class="page-full-height manual-import-style-27">ให้ Ollama อ่านใหม่</button>
+            </div>
+          </div>
+        </template>
+
+        <template data-if="isSaved">
+          <div role="status" class="manual-import-style-28">
+            <div class="manual-import-style-29">นำเข้าแล้ว</div>
+            <p class="manual-import-style-30">ข้อความจากภาพถูกส่งเข้าคิวให้ Ollama สรุป และจะรอคุณตรวจในหน้า "รอตรวจสอบ" ก่อนเผยแพร่ให้นักศึกษา</p>
+            <div class="manual-import-style-31">
+              <a href="review.html" class="page-full-height manual-import-style-32">ไปที่รอตรวจสอบ</a>
+              <button type="button" data-on-click="{{reset}}" class="page-full-height manual-import-style-33">นำเข้าภาพถัดไป</button>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- RIGHT: image -->
+      <div class="manual-import-style-34">
+        <div class="manual-import-style-35">
+          <div class="manual-import-style-36">
+            <span class="manual-import-style-37">ภาพต้นฉบับ</span>
+            <template data-if="hasImage"><button type="button" data-on-click="{{reset}}" class="page-full-height manual-import-style-38">เปลี่ยนภาพ</button></template>
+          </div>
+
+          <template data-if="noImage">
+            <div class="manual-import-style-39">
+              <input id="pick" type="file" accept="image/png,image/jpeg,image/webp" data-on-change="{{onFile}}" class="manual-import-style-40">
+              <label for="pick" class="page-full-height manual-import-style-41">
+                <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="5" y="9" width="34" height="26" rx="4" fill="none" stroke="#101A2E" stroke-width="2.5"></rect><circle cx="16" cy="19" r="3.5" fill="#FFE066" stroke="#101A2E" stroke-width="2"></circle><path d="M7 33l10-9 7 6 6-5 8 8" fill="none" stroke="#101A2E" stroke-width="2.5"></path></svg>
+                <span class="manual-import-style-42">เลือกภาพจากเครื่อง</span>
+                <span class="manual-import-style-43">ภาพหน้าจออีเมลหรือข้อความที่ส่งถึงอาจารย์ รองรับ PNG, JPG และ WebP</span>
+              </label>
+              <div class="manual-import-style-44"><button type="button" data-on-click="{{useSample}}" class="page-full-height manual-import-style-33">ใช้ภาพตัวอย่าง</button></div>
+            </div>
+          </template>
+
+          <template data-if="isSample">
+            <div class="manual-import-style-45">
+              <svg viewBox="0 0 520 560" width="100%" role="img" aria-label="ภาพตัวอย่างหน้าจออีเมลจากนักศึกษาถึงอาจารย์ ขอนัดปรึกษาบทที่ 2" class="manual-import-style-46">
+                <rect x="0" y="0" width="520" height="52" fill="#E6ECF3"></rect>
+                <text x="20" y="32" font-size="17" font-weight="600" fill="#101A2E">กล่องจดหมาย</text>
+                <rect x="14" y="74" width="492" height="26" fill="#FFE066" opacity="{{hlOpacity}}"></rect>
+                <rect x="14" y="108" width="330" height="26" fill="#FFE066" opacity="{{hlOpacity}}"></rect>
+                <text x="20" y="92" font-size="15" fill="#101A2E">จาก: กมลชนก รัตนวงศ์ &lt;kamonchanok.r@university.ac.th&gt;</text>
+                <text x="20" y="126" font-size="15" fill="#101A2E">เรื่อง: [CS-04] ขอนัดปรึกษาบทที่ 2</text>
+                <text x="20" y="160" font-size="14" fill="#566275">13 ต.ค. 2569 · 10:40</text>
+                <line x1="20" y1="178" x2="500" y2="178" stroke="#D3DAE3"></line>
+                <text x="20" y="214" font-size="16" fill="#101A2E">เรียน อาจารย์นุจรินทร์ค่ะ</text>
+                <text x="20" y="248" font-size="16" fill="#101A2E">หนูทำระบบแนะนำเส้นทางจักรยานในเมือง</text>
+                <text x="20" y="278" font-size="16" fill="#101A2E">ตอนนี้ทำถึงบทที่ 2 แล้ว ขอนัดปรึกษา</text>
+                <text x="20" y="308" font-size="16" fill="#101A2E">วันพฤหัสบดีที่ 22 ตุลาคม เวลา 10:00 น. ได้ไหมคะ</text>
+                <text x="20" y="352" font-size="16" fill="#101A2E">ขอบคุณค่ะ</text>
+                <text x="20" y="382" font-size="16" fill="#101A2E">กมลชนก รัตนวงศ์</text>
+              </svg>
+            </div>
+          </template>
+
+          <template data-if="isUpload">
+            <div class="manual-import-style-45"><img src="{{imgUrl}}" alt="ภาพที่นำเข้า" class="manual-import-style-47"></div>
+          </template>
+        </div>
+        <p class="manual-import-style-48">ภาพถูกใช้เพื่อสกัดข้อความและเก็บเป็นหลักฐานประกอบการให้คำปรึกษา ผู้ดูแลระบบไม่เห็นเนื้อหาของภาพ</p>
+      </div>
+    </div>
+  </div>
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

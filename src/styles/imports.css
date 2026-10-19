@@ -1,0 +1,168 @@
+body {
+  margin: 0;
+  background: #F4F6F8;
+}
+a {
+  color: #101A2E;
+}
+a:hover {
+  color: #176B4D;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+.imports-style-1 {
+  min-height: 1180px;
+  background: #F4F6F8;
+  color: #101A2E;
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.imports-style-2 {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 40px 56px;
+  box-sizing: border-box;
+}
+.imports-style-3 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.imports-style-4 {
+  margin-top: 6px;
+  color: #566275;
+  font-size: 15px;
+}
+.imports-style-5 {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.imports-style-6 {
+  flex: 1 1 220px;
+  min-width: 0;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+.imports-style-7 {
+  font-size: 15px;
+  color: #566275;
+}
+.imports-style-8 {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.imports-style-9 {
+  margin-top: 2px;
+  font-size: 14px;
+  color: #566275;
+}
+.imports-style-10 {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+button.imports-style-11 {
+  font: inherit;
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 18px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+}
+.imports-style-12 {
+  margin-top: 16px;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.imports-style-13 {
+  min-width: 760px;
+}
+.imports-style-14 {
+  display: flex;
+  gap: 16px;
+  padding: 12px 22px;
+  border-bottom: 1px solid #D3DAE3;
+  font-size: 14px;
+  color: #566275;
+  font-weight: 500;
+}
+.imports-style-15 {
+  flex: 2;
+}
+.imports-style-16 {
+  flex: 1;
+}
+.imports-style-17 {
+  flex: 0 0 130px;
+}
+.imports-style-18 {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 22px;
+  border-top: 1px solid #D3DAE3;
+}
+.imports-style-19 {
+  flex: 2;
+  min-width: 0;
+}
+.imports-style-20 {
+  font-weight: 500;
+}
+.imports-style-21 {
+  font-size: 14px;
+  color: #566275;
+}
+.imports-style-22 {
+  flex: 1;
+  min-width: 0;
+}
+.imports-style-23 {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.imports-style-24 {
+  flex: 2;
+  min-width: 0;
+  font-size: 15px;
+  color: #2B374D;
+}
+button.imports-style-25 {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #fff;
+  color: #101A2E;
+}
+.imports-style-26 {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}

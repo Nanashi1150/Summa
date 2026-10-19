@@ -1,0 +1,171 @@
+body {
+  margin: 0;
+}
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+.project-tree-style-1 {
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #101A2E;
+}
+.project-tree-style-2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 20px;
+  align-items: flex-end;
+}
+.project-tree-style-3 {
+  flex: 0 1 240px;
+  min-width: 180px;
+}
+.project-tree-style-4 {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.project-tree-style-5 {
+  font: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1.5px solid #8895A8;
+  border-radius: 6px;
+  background: #fff;
+  color: #101A2E;
+}
+.project-tree-style-6 {
+  flex: 1 1 240px;
+  min-width: 200px;
+}
+.project-tree-style-7 {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.project-tree-style-8 {
+  display: flex;
+  gap: 8px;
+}
+button.project-tree-style-9 {
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+}
+button.project-tree-style-10 {
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #fff;
+  color: #101A2E;
+}
+.project-tree-style-11 {
+  margin-top: 14px;
+  font-size: 14px;
+  color: #566275;
+}
+.project-tree-style-12 {
+  margin-top: 12px;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.project-tree-style-13 {
+  min-width: 820px;
+}
+.project-tree-style-14 {
+  display: flex;
+  gap: 16px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #D3DAE3;
+  font-size: 14px;
+  color: #566275;
+  font-weight: 500;
+}
+.project-tree-style-15 {
+  flex: 2;
+}
+.project-tree-style-16 {
+  flex: 3;
+}
+.project-tree-style-17 {
+  flex: 0 0 64px;
+}
+.project-tree-style-18 {
+  flex: 1.5;
+}
+.project-tree-style-19 {
+  flex: 0 0 120px;
+}
+button.project-tree-style-20 {
+  font: inherit;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  box-sizing: border-box;
+  border: 0;
+  border-top: 1px solid #D3DAE3;
+  color: #101A2E;
+}
+.project-tree-style-21 {
+  font-weight: 400;
+  color: #566275;
+  font-size: 14px;
+}
+.project-tree-style-22 {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  border-top: 1px solid #D3DAE3;
+}
+.project-tree-style-23 {
+  flex: 2;
+  min-width: 0;
+  font-weight: 500;
+}
+.project-tree-style-24 {
+  flex: 3;
+  min-width: 0;
+  color: #2B374D;
+}
+.project-tree-style-25 {
+  flex: 0 0 64px;
+  font-size: 14px;
+  color: #566275;
+}
+.project-tree-style-26 {
+  flex: 1.5;
+  min-width: 0;
+  font-size: 15px;
+}
+.project-tree-style-27 {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.project-tree-style-28 {
+  padding: 32px 20px;
+  color: #566275;
+  border-top: 1px solid #D3DAE3;
+}

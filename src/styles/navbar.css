@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}

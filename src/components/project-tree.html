@@ -1,0 +1,58 @@
+<div class="project-tree-style-1">
+
+  <div class="project-tree-style-2">
+    <div class="responsive-small-control project-tree-style-3">
+      <label for="pt-term" class="project-tree-style-4">ภาคเรียน/ปีการศึกษา</label>
+      <select id="pt-term" value="{{term}}" data-on-change="{{setTerm}}" class="page-full-height project-tree-style-5">
+        <option value="all">ทุกภาคเรียน</option>
+        <option value="2569/1">2569 ภาคเรียนที่ 1</option>
+        <option value="2568/2">2568 ภาคเรียนที่ 2</option>
+      </select>
+    </div>
+    <div class="responsive-small-control project-tree-style-6">
+      <label for="pt-q" class="project-tree-style-4">ค้นหาชื่อ หัวข้อ หรือรหัสโครงงาน</label>
+      <input id="pt-q" type="search" value="{{query}}" data-on-change="{{setQuery}}" class="page-full-height project-tree-style-5">
+    </div>
+    <div>
+      <div class="project-tree-style-7">เรียงภายในสาขาตาม</div>
+      <div class="project-tree-style-8">
+        <template data-each="sorts" data-as="s">
+          <button type="button" data-on-click="{{s.pick}}" aria-pressed="{{s.on}}" style="background:{{s.bg}};color:{{s.fg}}" class="page-full-height project-tree-style-9">{{s.label}}</button>
+        </template>
+        <button type="button" data-on-click="{{flip}}" aria-label="สลับลำดับการเรียง" class="page-full-height project-tree-style-10">{{dirLabel}}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="project-tree-style-11">จัดกลุ่มตาม ภาคเรียน/ปีการศึกษา › คณะ › สาขา แล้วเรียงรายชื่อต่อ · พบ {{total}} โครงงาน</div>
+
+  <div class="project-tree-style-12">
+    <div class="project-tree-style-13">
+      <div class="project-tree-style-14">
+        <div class="project-tree-style-15">ชื่อ-นามสกุล</div><div class="project-tree-style-16">หัวข้อโครงงาน</div><div class="project-tree-style-17">รหัส</div>
+        <template data-if="showAdvisor"><div class="project-tree-style-18">อาจารย์ที่ปรึกษา</div></template>
+        <div class="project-tree-style-19">สถานะ</div>
+      </div>
+      <template data-each="rows" data-as="r">
+        <template data-if="r.isHead">
+          <button type="button" data-on-click="{{r.toggle}}" aria-expanded="{{r.open}}" style="padding:8px 20px 8px {{r.pad}}px;background:{{r.bg}};font-weight:{{r.weight}}" class="page-full-height project-tree-style-20">
+            <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="{{r.arrow}}" fill="#101A2E"></path></svg>
+            <span>{{r.label}}</span><span class="project-tree-style-21">{{r.count}} โครงงาน</span>
+          </button>
+        </template>
+        <template data-if="r.isRow">
+          <div style="padding:12px 20px 12px {{r.pad}}px" class="project-tree-style-22">
+            <div class="project-tree-style-23">{{r.name}}</div>
+            <div class="project-tree-style-24">{{r.topic}}</div>
+            <div class="project-tree-style-25">{{r.code}}</div>
+            <template data-if="showAdvisor"><div class="project-tree-style-26">{{r.advisor}}</div></template>
+            <div class="project-tree-style-19"><span style="background:{{r.sbg}};color:{{r.sfg}}" class="project-tree-style-27">{{r.status}}</span></div>
+          </div>
+        </template>
+      </template>
+      <template data-if="empty">
+        <div class="project-tree-style-28">ไม่พบโครงงานตามเงื่อนไข ลองเปลี่ยนภาคเรียนหรือล้างคำค้นหา</div>
+      </template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>รายงานและ Infographic | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/reports.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/reports.js"></script>
+</head>
+<body data-page="reports" data-role="student" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template">
+
+<div class="page-full-height reports-style-1">
+
+
+  <div class="responsive-page-padding reports-style-2">
+    <h1 class="reports-style-3">รายงานและ Infographic</h1>
+    <p class="reports-style-4">สรุปความคืบหน้าจากข้อเสนอแนะที่อาจารย์อนุมัติแล้ว ใช้เป็นหลักฐานประกอบการสอบความก้าวหน้า ส่งออกเป็น PDF ขนาด A4 · ตัวอย่างข้อมูล</p>
+
+    <div class="reports-style-5">
+
+      <!-- controls -->
+      <div class="report-controls reports-style-6">
+        <div class="reports-style-7">Template</div>
+        <div class="reports-style-8">กำหนดโดยผู้ดูแลระบบ</div>
+        <div class="reports-style-9">
+          <template data-each="templates" data-as="t">
+            <button type="button" data-on-click="{{t.pick}}" aria-pressed="{{t.on}}" style="border:1.5px solid {{t.border}};background:{{t.bg}}" class="page-full-height reports-style-10">
+              <div class="reports-style-7">{{t.name}}</div>
+              <div class="reports-style-11">{{t.desc}}</div>
+            </button>
+          </template>
+        </div>
+
+        <div class="reports-style-12">ส่วนที่แสดงในรายงาน</div>
+        <div class="reports-style-9">
+          <template data-each="sections" data-as="s">
+            <button type="button" data-on-click="{{s.pick}}" role="switch" aria-checked="{{s.on}}" class="page-full-height reports-style-13">
+              <span style="background:{{s.box}}" class="reports-style-14"><svg width="12" height="10" viewBox="0 0 12 10" aria-hidden="true" style="opacity:{{s.tick}}"><path d="M1 5l3.5 3.5L11 1.5" fill="none" stroke="#101A2E" stroke-width="2.2"></path></svg></span>
+              {{s.label}}
+            </button>
+          </template>
+        </div>
+
+        <button type="button" data-on-click="{{download}}" class="page-full-height reports-style-15">{{dlLabel}}</button>
+        <div role="status" class="reports-style-16">{{dlNote}}</div>
+      </div>
+
+      <!-- A4 preview -->
+      <div class="report-preview reports-style-17">
+        <div class="report-sheet reports-style-18">
+
+          <div class="reports-style-19">
+            <div class="reports-style-20">
+              <div class="reports-style-21">Summa · {{tplName}}</div>
+              <div class="reports-style-22">สร้างเมื่อ 19 ต.ค. 2569</div>
+            </div>
+            <div class="reports-style-23">ความคืบหน้าโครงงาน CS-01</div>
+            <div class="reports-style-24">ระบบสรุปข้อเสนอแนะและนัดหมายอาจารย์ที่ปรึกษาด้วย AI</div>
+            <div class="reports-style-25">กรวิชญ์ กิจภิญโญ · อาจารย์ที่ปรึกษา อาจารย์นุจรินทร์ ปทุมพงษ์ · ปีการศึกษา 2569 ภาคเรียนที่ 1</div>
+          </div>
+
+          <template data-if="showProgress">
+            <div class="reports-style-26">
+              <div class="reports-style-27">ความคืบหน้าตามช่วง</div>
+              <div class="reports-style-28">
+                <template data-each="stages" data-as="s">
+                  <div class="reports-style-29">
+                    <div style="background:{{s.bar}}" class="reports-style-30"></div>
+                    <div class="reports-style-31">{{s.label}}</div>
+                    <div class="reports-style-32">{{s.state}}</div>
+                    <div class="reports-style-33">{{s.date}}</div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          <template data-if="showMeet">
+            <div class="reports-style-26">
+              <div class="reports-style-27">การพบอาจารย์ที่ปรึกษา</div>
+              <div class="reports-style-34">
+                <div class="reports-style-35"></div>
+                <template data-each="meets" data-as="m">
+                  <div style="left:{{m.left}}%" class="reports-style-36">
+                    <div style="background:{{m.dot}}" class="reports-style-37"></div>
+                    <div class="reports-style-38">{{m.label}}</div>
+                  </div>
+                </template>
+              </div>
+              <div class="reports-style-39">จุดทึบคือการพบที่เกิดขึ้นแล้ว จุดโปร่งคือนัดหมายที่ยังไม่ถึง</div>
+            </div>
+          </template>
+
+          <template data-if="showTasks">
+            <div class="reports-style-26">
+              <div class="reports-style-20">
+                <div class="reports-style-27">ข้อเสนอแนะและงานที่ได้รับ</div>
+                <div class="reports-style-11">เสร็จแล้ว 3 จาก 5 งาน</div>
+              </div>
+              <div class="reports-style-40">
+                <div class="reports-style-41"></div><div class="reports-style-41"></div><div class="reports-style-41"></div><div class="reports-style-42"></div><div class="reports-style-42"></div>
+              </div>
+              <div class="reports-style-43">
+                <template data-each="tasks" data-as="t">
+                  <div class="reports-style-44">
+                    <div class="reports-style-45">{{t.stage}}</div>
+                    <div class="reports-style-46">{{t.title}}</div>
+                    <div class="reports-style-47"><span style="background:{{t.bg}};color:{{t.fg}}" class="reports-style-48">{{t.status}}</span></div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          <template data-if="showQuote">
+            <div class="reports-style-26">
+              <div class="reports-style-27">ข้อความจากอาจารย์ที่ปรึกษา</div>
+              <div class="reports-style-49">
+                ขอให้ <span class="reports-style-50">แก้แผนภาพ ER ในบทที่ 3 ให้ครบทุกตาราง</span> และ <span class="reports-style-50">เพิ่มผลทดสอบการสกัดวันนัดหมายจากอีเมลจริง</span> ก่อนสอบความก้าวหน้า
+              </div>
+              <div class="reports-style-51">12 ต.ค. 2569 · เฉพาะส่วนที่อาจารย์อนุญาตให้แสดง</div>
+            </div>
+          </template>
+
+          <div class="reports-style-52">รายงานนี้ประกอบด้วยผลสรุปที่อาจารย์ที่ปรึกษาอนุมัติแล้วเท่านั้น สร้างโดย Summa จากอีเมลและบันทึกการให้คำปรึกษา</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

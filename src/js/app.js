@@ -1,8 +1,7 @@
-/* Shared navigation and small native-DOM renderer for the extracted page data. */
+/* Shared page renderer, access checks and action dispatch for editable HTML templates. */
 (() => {
   'use strict';
   const registry = new Map();
-  const extensions = new Map();
   const instances = new Set();
   let actionInFlight = false;
   function currentSession() {return window.SummaAuth?.state || {ready:true,user:null,profile:null,error:{code:'summa/unavailable'}};}
@@ -11,34 +10,8 @@
     const notice=document.getElementById('auth-status');
     if(notice){notice.textContent=message;notice.hidden=false;}
   }
-  function confirmAction({title,message,label='ยืนยัน'}) {
-    return new Promise(resolve=>{
-      const previous=document.activeElement;
-      const dialog=document.createElement('dialog');dialog.className='confirmation-dialog';
-      dialog.setAttribute('aria-labelledby','confirmation-title');dialog.setAttribute('aria-describedby','confirmation-description');
-      const heading=document.createElement('h2');heading.id='confirmation-title';heading.textContent=title;
-      const description=document.createElement('p');description.id='confirmation-description';description.textContent=message;
-      const actions=document.createElement('div');actions.className='confirmation-actions';
-      const cancel=document.createElement('button');cancel.type='button';cancel.textContent='ยกเลิก';cancel.dataset.confirm='cancel';
-      const accept=document.createElement('button');accept.type='button';accept.textContent=label;accept.className='confirm-primary';accept.dataset.confirm='accept';
-      actions.append(cancel,accept);dialog.append(heading,description,actions);document.body.append(dialog);
-      let settled=false;
-      function finish(result){if(settled)return;settled=true;if(dialog.open && dialog.close)dialog.close();dialog.remove();previous?.focus({preventScroll:true});resolve(result);}
-      cancel.addEventListener('click',()=>finish(false));accept.addEventListener('click',()=>finish(true));
-      dialog.addEventListener('cancel',event=>{event.preventDefault();finish(false);});
-      dialog.addEventListener('keydown',event=>{
-        if(event.key==='Escape'){event.preventDefault();finish(false);}
-        if(event.key==='Tab'){event.preventDefault();(document.activeElement===cancel?accept:cancel).focus();}
-      });
-      if(dialog.showModal)dialog.showModal();else {dialog.setAttribute('open','');dialog.setAttribute('aria-modal','true');}
-      cancel.focus();
-    });
-  }
-  const confirmations={
-    approve:{title:'ยืนยันการอนุมัติผลสรุป',message:'ต้องการอนุมัติผลสรุปที่เลือกหรือไม่? กรุณาตรวจสอบข้อความและกำหนดส่งให้ถูกต้องก่อนยืนยัน',label:'ยืนยันการอนุมัติ'},
-    activate:{title:'ยืนยันการอนุมัติบัญชี',message:'ต้องการเปิดใช้งานบัญชีนี้หรือไม่? ผู้ใช้จะเข้าถึงระบบได้ตามบทบาทที่กำหนด',label:'อนุมัติบัญชี'},
-    confirmAppt:{title:'ยืนยันการนัดหมาย',message:'ต้องการยืนยันนัดหมายวันที่ 29 ต.ค. 2569 เวลา 13:30 น. ที่ห้องพักอาจารย์หรือไม่?',label:'ยืนยันนัดหมาย'}
-  };
+  const confirmAction=options=>SummaConfirmDialog.confirm(options);
+  const confirmations=SummaConfirmDialog.actions;
   async function invoke(callback,binding,event,subject) {
     if(event.type==='submit')event.preventDefault();
     const page=document.body.dataset.page;
@@ -66,6 +39,7 @@
   class PageLogic {
     constructor(props = {}) { this.props = props; this.state = {}; }
     setState(patch) {
+      if (this.destroyed) return;
       Object.assign(this.state, patch);
       this.update?.();
       if (this.storageKey) {
@@ -147,11 +121,10 @@
     };
     instance.update();
     Promise.resolve(instance.componentDidMount?.()).catch(error=>notify(SummaPolicy.errorMessage(error)));
-    return {destroy(){children.forEach(child=>child.destroy());instance.componentWillUnmount?.();instances.delete(instance);}};
+    return {destroy(){instance.destroyed=true;children.forEach(child=>child.destroy());instance.componentWillUnmount?.();instances.delete(instance);}};
   }
   window.Summa = {
-    register(name,factory){const Component=factory(PageLogic);registry.set(name,extensions.has(name)?extensions.get(name)(Component):Component);},
-    extend(name,extension){extensions.set(name,extension);if(registry.has(name))registry.set(name,extension(registry.get(name)));},
+    register(name,factory){const Component=factory(PageLogic);registry.set(name,Component);},
     navigate,confirm:confirmAction
   };
   document.addEventListener('DOMContentLoaded', () => {
@@ -160,41 +133,16 @@
     const template=document.getElementById('page-template');
     let mounted=null;
     let mountedIdentity=null;
-    const menus={
-      student:[['ภาพรวม','student'],['รายงาน','reports']],
-      advisor:[['รอตรวจสอบ','review'],['โครงงานที่ดูแล','projects'],['นำเข้าจากภาพ','manual-import'],['เชื่อมต่อ Gmail','gmail'],['รายงาน','reports']],
-      admin:[['ผู้ใช้และสิทธิ์','users'],['โครงงานทั้งหมด','admin-projects'],['นำเข้าอีเมล','imports'],['การเชื่อมต่อระบบ','integrations'],['บันทึกการใช้งาน','logs']]
-    };
-    function updateNavigation(session) {
-      const summary=document.querySelector('.account-menu summary');
-      const panel=document.querySelector('.account-panel');
-      if(!summary || !panel)return;
-      const active=session.user && session.profile?.status==='active';
-      summary.textContent=active?(session.profile.name || session.user.email):'ผู้เยี่ยมชม';
-      panel.replaceChildren();
-      function link(label,url){const a=document.createElement('a');a.textContent=label;a.href=url;panel.append(a);}
-      if(active) {
-        link('พื้นที่ทำงานของฉัน',SummaPolicy.destination(session));
-        const logout=document.createElement('button');logout.type='button';logout.textContent='ออกจากระบบ';
-        logout.addEventListener('click',async()=>{logout.disabled=true;try{await SummaAuth.logout();navigate('login.html');}catch(error){notify(SummaPolicy.errorMessage(error));logout.disabled=false;}});
-        panel.append(logout);
-        if(!SummaPolicy.publicPages.includes(page)) {
-          const nav=document.getElementById('primary-navigation');nav.replaceChildren();
-          for(const [label,name] of menus[session.profile.role] || []){
-            const a=document.createElement('a');a.textContent=label;a.href=name+'.html';if(name===page)a.setAttribute('aria-current','page');nav.append(a);
-          }
-        }
-      } else link('เข้าสู่ระบบ','login.html');
-    }
+    const navigation=SummaNavbar.create({page,notify,navigate});
     function refreshAccess() {
       const session=currentSession();
-      updateNavigation(session);
+      navigation.update(session);
       const publicPage=SummaPolicy.publicPages.includes(page);
       const allowed=SummaPolicy.canAccess(page,session);
       document.body.dataset.auth=allowed?'allowed':(session.ready?'denied':'pending');
       const identity=publicPage?'public':session.user?.uid+':'+session.profile?.role;
       if(allowed) {
-        if(!mounted || identity!==mountedIdentity){mounted?.destroy();mounted=mount(root,template,page);mountedIdentity=identity;}
+        if(!mounted || identity!==mountedIdentity){mounted?.destroy();mounted=mount(root,template,document.body.dataset.controller || page);mountedIdentity=identity;}
         return;
       }
       mounted?.destroy();mounted=null;mountedIdentity=null;root.replaceChildren();
@@ -208,13 +156,6 @@
     refreshAccess();
     window.addEventListener('summa:auth',refreshAccess);
     window.SummaAuth?.ready.then(refreshAccess);
-    const toggle=document.querySelector('.nav-toggle');
-    const nav=document.getElementById('primary-navigation');
-    const close=()=>{toggle?.setAttribute('aria-expanded','false');nav?.classList.remove('is-open');};
-    toggle?.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')!=='true';toggle.setAttribute('aria-expanded',String(open));nav.classList.toggle('is-open',open);});
-    document.addEventListener('keydown',event=>{if(event.key==='Escape'){close();document.querySelectorAll('.account-menu[open]').forEach(el=>el.open=false);}});
-    document.addEventListener('click',event=>{if(!event.target.closest('.site-header')){close();document.querySelectorAll('.account-menu[open]').forEach(el=>el.open=false);}});
-    nav?.addEventListener('click',event=>{if(event.target.closest('a'))close();});
     document.getElementById('page-root').addEventListener('keydown',event=>{
       if(page==='login' && event.key==='Enter' && event.target.matches('input')) {event.preventDefault();document.querySelector('[data-login-submit]')?.click();}
     });

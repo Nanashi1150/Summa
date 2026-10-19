@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  background: #F4F6F8;
+}
+a {
+  color: #101A2E;
+}
+a:hover {
+  color: #176B4D;
+}
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+body {
+  margin: 0;
+}
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+.admin-projects-style-1 {
+  min-height: 1300px;
+  background: #F4F6F8;
+  color: #101A2E;
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.admin-projects-style-2 {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 40px 56px;
+  box-sizing: border-box;
+}
+.admin-projects-style-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.admin-projects-style-4 {
+  min-width: 0;
+}
+.admin-projects-style-5 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.admin-projects-style-6 {
+  margin: 6px 0 0;
+  color: #566275;
+  font-size: 15px;
+}
+button.admin-projects-style-7 {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 22px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #FFE066;
+  color: #101A2E;
+}

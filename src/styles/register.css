@@ -1,0 +1,216 @@
+body {
+  margin: 0;
+  background: #F4F6F8;
+}
+a {
+  color: #101A2E;
+}
+a:hover {
+  color: #176B4D;
+}
+input:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+.register-style-1 {
+  min-height: 1100px;
+  background: #F4F6F8;
+  color: #101A2E;
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.register-style-2 {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.register-style-3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 600;
+}
+.register-style-4 {
+  font-size: 15px;
+}
+.register-style-5 {
+  font-weight: 600;
+}
+.register-style-6 {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 40px 64px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  align-items: flex-start;
+}
+.register-style-7 {
+  flex: 1 1 300px;
+  min-width: 0;
+}
+.register-style-8 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.register-style-9 {
+  margin: 12px 0 0;
+  color: #2B374D;
+  max-width: 24em;
+}
+.register-style-10 {
+  margin: 28px 0 0;
+  padding: 0 0 0 20px;
+  color: #2B374D;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.register-style-11 {
+  flex: 1.6 1 520px;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  padding: 32px;
+}
+.register-style-12 {
+  padding: 8px 0;
+}
+.register-style-13 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.register-style-14 {
+  margin: 12px 0 0;
+  color: #2B374D;
+}
+.register-style-15 {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  background: #101A2E;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+.register-style-16 {
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #F6DDDD;
+  color: #8A1F1F;
+  font-weight: 500;
+}
+.register-style-17 {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.register-style-18 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+button.register-style-19 {
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 1 1 200px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+}
+.register-style-20 {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #566275;
+}
+.register-style-21 {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.register-style-22 {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+.register-style-23 {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.register-style-24 {
+  font: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1.5px solid #8895A8;
+  border-radius: 6px;
+  background: #fff;
+  color: #101A2E;
+}
+.register-style-25 {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.register-style-26 {
+  font: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 48px;
+  padding: 10px 12px;
+  border: 1.5px solid #8895A8;
+  border-radius: 6px;
+  background: #fff;
+  color: #101A2E;
+}
+.register-style-27 {
+  flex: 1 1 220px;
+  min-width: 0;
+  align-self: flex-end;
+  font-size: 14px;
+  color: #566275;
+  padding-bottom: 12px;
+}
+.register-style-28 {
+  margin-top: 20px;
+}
+.register-style-29 {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #566275;
+}
+button.register-style-30 {
+  margin-top: 32px;
+  font: inherit;
+  font-weight: 600;
+  width: 100%;
+  min-height: 48px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #FFE066;
+  color: #101A2E;
+  cursor: pointer;
+}

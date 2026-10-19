@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>การนำเข้าอีเมล | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/imports.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/imports.js"></script>
+</head>
+<body data-page="imports" data-role="admin" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template">
+
+<div class="page-full-height imports-style-1">
+
+
+
+<div class="responsive-page-padding imports-style-2">
+  <h1 class="imports-style-3">สถานะการนำเข้าอีเมล</h1>
+  <div class="imports-style-4">ตัวอย่างข้อมูล · ผู้ดูแลเห็นสถานะทางเทคนิค ไม่เห็นผลสรุปทางวิชาการเพื่ออนุมัติแทนอาจารย์</div>
+
+  <div class="imports-style-5">
+    <template data-each="health" data-as="h">
+      <div class="imports-style-6">
+        <div class="imports-style-7">{{h.name}}</div>
+        <div class="imports-style-8">
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="{{h.dot}}" stroke="#101A2E" stroke-width="1.5"></circle></svg>
+          {{h.state}}
+        </div>
+        <div class="imports-style-9">{{h.note}}</div>
+      </div>
+    </template>
+  </div>
+
+  <div class="imports-style-10">
+    <template data-each="filters" data-as="f">
+      <button type="button" data-on-click="{{f.pick}}" style="background:{{f.bg}};color:{{f.fg}}" class="page-full-height imports-style-11">{{f.label}}</button>
+    </template>
+  </div>
+
+  <div class="imports-style-12">
+    <div class="imports-style-13">
+      <div class="imports-style-14">
+        <div class="imports-style-15">อีเมล</div><div class="imports-style-16">โครงงาน</div><div class="imports-style-16">สถานะ</div><div class="imports-style-15">รายละเอียด</div><div class="imports-style-17"></div>
+      </div>
+      <template data-each="rows" data-as="r">
+        <div class="imports-style-18">
+          <div class="imports-style-19"><div class="imports-style-20">{{r.subject}}</div><div class="imports-style-21">{{r.from}} · {{r.time}}</div></div>
+          <div class="imports-style-22">{{r.project}}</div>
+          <div class="imports-style-22"><span style="background:{{r.bg}};color:{{r.fg}}" class="imports-style-23">{{r.status}}</span></div>
+          <div class="imports-style-24">{{r.detail}}</div>
+          <div class="imports-style-17">
+            <template data-if="r.canRetry">
+              <button type="button" data-on-click="{{r.retry}}" class="page-full-height imports-style-25">ประมวลผลใหม่</button>
+            </template>
+            <template data-if="r.isUnmatched">
+              <a href="manual-import.html" class="imports-style-26">จับคู่ด้วยตนเอง</a>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

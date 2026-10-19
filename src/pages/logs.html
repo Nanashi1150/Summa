@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>บันทึกการใช้งาน | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/logs.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/logs.js"></script>
+</head>
+<body data-page="logs" data-role="admin" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template">
+
+<div class="page-full-height logs-style-1">
+
+  <div class="responsive-page-padding logs-style-2">
+    <div class="logs-style-3">
+      <div class="logs-style-4">
+        <h1 class="logs-style-5">Log การใช้งาน</h1>
+        <p class="logs-style-6">บันทึกนี้เพิ่มได้อย่างเดียว แก้ไขหรือลบไม่ได้ ครอบคลุมการเข้าสู่ระบบ การจัดการบัญชี การนำเข้าอีเมล และการตั้งค่าระบบ · ตัวอย่างข้อมูล</p>
+      </div>
+      <div class="logs-style-7">
+        <div>
+          <label for="ret" class="logs-style-8">เก็บบันทึกไว้</label>
+          <select id="ret" class="page-full-height logs-style-9">
+            <option>90 วัน</option><option selected="">1 ปี</option><option>3 ปี</option>
+          </select>
+        </div>
+        <button type="button" class="page-full-height logs-style-10">ส่งออก CSV</button>
+      </div>
+    </div>
+
+    <div class="logs-style-11">
+      <template data-each="cats" data-as="c">
+        <button type="button" data-on-click="{{c.pick}}" aria-pressed="{{c.on}}" style="background:{{c.bg}};color:{{c.fg}}" class="page-full-height logs-style-12">{{c.label}}</button>
+      </template>
+    </div>
+    <div class="logs-style-13">
+      <div class="responsive-small-control logs-style-14">
+        <label for="lq" class="logs-style-8">ค้นหาผู้ดำเนินการหรือรายการ</label>
+        <input id="lq" type="search" value="{{query}}" data-on-change="{{setQuery}}" class="page-full-height logs-style-15">
+      </div>
+      <div class="responsive-small-control logs-style-16">
+        <label for="lr" class="logs-style-8">ผลลัพธ์</label>
+        <select id="lr" value="{{result}}" data-on-change="{{setResult}}" class="page-full-height logs-style-15">
+          <option value="all">ทุกผลลัพธ์</option><option value="ok">สำเร็จ</option><option value="denied">ถูกปฏิเสธ</option><option value="error">ผิดพลาด</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="logs-style-17">
+      <div class="logs-style-18">
+        <div class="logs-style-19">
+          <div class="logs-style-20">เวลา</div><div class="logs-style-21">ผู้ดำเนินการ</div><div class="logs-style-22">การกระทำ</div><div class="logs-style-23">ผลลัพธ์</div><div class="logs-style-24"></div>
+        </div>
+        <template data-each="rows" data-as="r">
+          <div class="logs-style-25">
+            <button type="button" data-on-click="{{r.toggle}}" aria-expanded="{{r.open}}" style="background:{{r.bg}}" class="logs-style-26">
+              <div class="logs-style-27">{{r.time}}</div>
+              <div class="logs-style-28"><div class="logs-style-29">{{r.actor}}</div><div class="logs-style-30">{{r.role}}</div></div>
+              <div class="logs-style-31"><div>{{r.action}}</div><div class="logs-style-32">{{r.cat}} · {{r.target}}</div></div>
+              <div class="logs-style-23"><span style="background:{{r.rbg}};color:{{r.rfg}}" class="logs-style-33">{{r.resultLabel}}</span></div>
+              <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true" class="logs-style-34"><path d="{{r.arrow}}" fill="#101A2E"></path></svg>
+            </button>
+            <template data-if="r.open">
+              <div style="background:{{r.bg}}" class="logs-style-35">
+                <div class="logs-style-36">{{r.detail}}</div>
+                <div class="logs-style-37">IP {{r.ip}} · Session {{r.session}}</div>
+              </div>
+            </template>
+          </div>
+        </template>
+        <template data-if="empty">
+          <div class="logs-style-38">ไม่พบเหตุการณ์ตามเงื่อนไข ลองเปลี่ยนหมวดหรือล้างคำค้นหา</div>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

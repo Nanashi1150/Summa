@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>การเชื่อมต่อระบบ | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/integrations.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/integrations.js"></script>
+</head>
+<body data-page="integrations" data-role="admin" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template">
+
+<div class="page-full-height integrations-style-1">
+
+  <div class="responsive-page-padding integrations-style-2">
+    <h1 class="integrations-style-3">การเชื่อมต่อระบบ</h1>
+    <p class="integrations-style-4">ตั้งค่า Google OAuth และ Ollama ของทั้งระบบ อาจารย์แต่ละคนเชื่อมต่อ Gmail ของตนเองในหน้าของอาจารย์ ผู้ดูแลเห็นสถานะ แต่ไม่เห็นเนื้อหาอีเมล</p>
+
+    <div class="integrations-style-5">
+      <h2 class="integrations-style-6">Google OAuth 2.0 และ Gmail API</h2>
+      <div class="integrations-style-7">
+        <div class="integrations-style-8">
+          <label for="cid" class="integrations-style-9">Client ID</label>
+          <input id="cid" type="text" value="[CLIENT_ID].apps.googleusercontent.com" class="page-full-height integrations-style-10">
+        </div>
+        <div class="integrations-style-11">
+          <label for="sec" class="integrations-style-9">Client secret</label>
+          <input id="sec" type="password" value="••••••••••••" class="page-full-height integrations-style-10">
+          <div class="integrations-style-12">เก็บแบบเข้ารหัส แสดงซ้ำไม่ได้</div>
+        </div>
+      </div>
+      <div class="integrations-style-13">
+        <label for="ruri" class="integrations-style-9">Redirect URI</label>
+        <input id="ruri" type="text" readonly="" value="https://[YOUR-DOMAIN]/api/auth/google/callback" class="page-full-height integrations-style-14">
+        <div class="integrations-style-12">คัดลอกไปใส่ในหน้าตั้งค่าของ Google Cloud Console</div>
+      </div>
+      <div class="integrations-style-15">สิทธิ์ที่อนุญาตให้ขอจากอาจารย์</div>
+      <div class="integrations-style-16">
+        <template data-each="scopes" data-as="s">
+          <button type="button" data-on-click="{{s.pick}}" aria-pressed="{{s.on}}" style="background:{{s.bg}}" class="page-full-height integrations-style-17">{{s.label}}</button>
+        </template>
+      </div>
+      <div class="integrations-style-18">
+        <button type="button" data-on-click="{{save}}" class="page-full-height integrations-style-19">บันทึกการตั้งค่า</button>
+        <button type="button" data-on-click="{{testGoogle}}" class="page-full-height integrations-style-20">ทดสอบการเชื่อมต่อ</button>
+        <span role="status" class="integrations-style-21">{{googleMsg}}</span>
+      </div>
+
+      <div class="integrations-style-22">อาจารย์ที่เชื่อมต่อ Gmail แล้ว</div>
+      <div class="integrations-style-23">
+        <div class="integrations-style-24">
+          <template data-each="advisors" data-as="a">
+            <div style="border-top:{{a.top}}" class="integrations-style-25">
+              <div class="integrations-style-26"><div class="integrations-style-27">{{a.name}}</div><div class="integrations-style-28">{{a.sync}}</div></div>
+              <div class="integrations-style-29"><span style="background:{{a.bg}};color:{{a.fg}}" class="integrations-style-30">{{a.status}}</span></div>
+              <div class="integrations-style-31">
+                <template data-if="a.canRevoke"><button type="button" data-on-click="{{a.revoke}}" class="page-full-height integrations-style-32">เพิกถอนการเข้าถึง</button></template>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <div class="integrations-style-33">
+      <h2 class="integrations-style-6">Ollama</h2>
+      <div class="integrations-style-7">
+        <div class="integrations-style-8">
+          <label for="ep" class="integrations-style-9">ที่อยู่เซิร์ฟเวอร์</label>
+          <input id="ep" type="text" value="http://localhost:11434" class="page-full-height integrations-style-10">
+        </div>
+        <div class="integrations-style-11">
+          <label for="mdl" class="integrations-style-9">โมเดล</label>
+          <input id="mdl" type="text" value="[MODEL_NAME]" class="page-full-height integrations-style-10">
+        </div>
+      </div>
+      <div class="integrations-style-13">
+        <label for="prm" class="integrations-style-9">คำสั่งพื้นฐานสำหรับสกัดและสรุป</label>
+        <textarea id="prm" rows="4" class="integrations-style-34">สรุปข้อเสนอแนะ ความคืบหน้า รายการงาน ผู้รับผิดชอบ และกำหนดส่งจากข้อความ ตอบเป็น JSON อ้างอิงประโยคต้นทางทุกรายการ ถ้าไม่พบกำหนดส่งให้ระบุว่า null</textarea>
+      </div>
+      <div class="integrations-style-35">
+        <button type="button" class="page-full-height integrations-style-19">บันทึกการตั้งค่า</button>
+        <button type="button" data-on-click="{{testOllama}}" class="page-full-height integrations-style-20">ทดสอบการเชื่อมต่อ</button>
+        <span role="status" class="integrations-style-21">{{ollamaMsg}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

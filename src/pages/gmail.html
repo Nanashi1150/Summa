@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>เชื่อมต่อ Gmail | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/gmail.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/gmail.js"></script>
+</head>
+<body data-page="gmail" data-role="advisor" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template">
+
+<div class="page-full-height gmail-style-1">
+
+  <div class="responsive-page-padding gmail-style-2">
+    <h1 class="gmail-style-3">เชื่อมต่อ Gmail</h1>
+    <p class="gmail-style-4">Summa อ่านเฉพาะอีเมลที่ตรงเงื่อนไขของคุณ โดยเชื่อมต่อผ่าน Google OAuth 2.0 ไม่เก็บรหัสผ่าน และคุณตัดการเชื่อมต่อได้ทุกเมื่อ</p>
+
+    <!-- not connected -->
+    <template data-if="notConnected">
+      <div class="gmail-style-5">
+        <h2 class="gmail-style-6">ยังไม่ได้เชื่อมต่อบัญชี</h2>
+        <div class="gmail-style-7">Summa จะขอสิทธิ์ต่อไปนี้จาก Google</div>
+        <ul class="gmail-style-8">
+          <template data-each="scopes" data-as="s">
+            <li class="gmail-style-9">
+              <div class="gmail-style-10"><div class="gmail-style-11">{{s.title}}</div><div class="gmail-style-12">{{s.body}}</div></div>
+              <div class="gmail-style-13">{{s.tag}}</div>
+            </li>
+          </template>
+        </ul>
+        <div class="gmail-style-14">ผู้ดูแลระบบตั้งค่า Google OAuth ของระบบได้ แต่ไม่เห็นกล่องอีเมลหรือข้อความของคุณ</div>
+        <div class="gmail-style-15">
+          <button type="button" data-on-click="{{connect}}" class="page-full-height gmail-style-16">เชื่อมต่อด้วยบัญชี Google</button>
+          <span class="gmail-style-17">คุณจะถูกพาไปหน้าอนุญาตของ Google แล้วกลับมาที่หน้านี้</span>
+        </div>
+      </div>
+    </template>
+
+    <!-- connected -->
+    <template data-if="connected">
+      <div>
+        <div class="gmail-style-18">
+          <div class="gmail-style-19">
+            <div class="gmail-style-20">เชื่อมต่อแล้ว</div>
+            <div class="gmail-style-21">nujarin.p@university.ac.th</div>
+            <div class="gmail-style-17">เชื่อมต่อเมื่อ 13 ต.ค. 2569 · ตรวจอีเมลล่าสุด 2 นาทีที่แล้ว · ตัวอย่างข้อมูล</div>
+          </div>
+          <button type="button" data-on-click="{{disconnect}}" class="page-full-height gmail-style-22">ตัดการเชื่อมต่อ</button>
+        </div>
+
+        <div class="gmail-style-23">
+          <h2 class="gmail-style-6">เลือกอีเมลที่ให้ Summa นำเข้า</h2>
+
+          <div class="gmail-style-24">Label ใน Gmail</div>
+          <div class="gmail-style-25">นำเข้าเฉพาะอีเมลที่ติด Label เหล่านี้</div>
+          <div class="gmail-style-26">
+            <template data-each="labels" data-as="l">
+              <button type="button" data-on-click="{{l.pick}}" aria-pressed="{{l.on}}" style="background:{{l.bg}}" class="page-full-height gmail-style-27">{{l.label}}</button>
+            </template>
+          </div>
+
+          <div class="gmail-style-28">
+            <div class="gmail-style-29">
+              <label for="kw" class="gmail-style-30">คำสำคัญในหัวเรื่อง</label>
+              <input id="kw" type="text" value="{{keywords}}" data-on-change="{{setKeywords}}" class="page-full-height gmail-style-31">
+              <div class="gmail-style-25">คั่นด้วยเครื่องหมายจุลภาค</div>
+            </div>
+            <div class="gmail-style-29">
+              <label for="pat" class="gmail-style-30">รูปแบบรหัสโครงงาน</label>
+              <input id="pat" type="text" value="{{pattern}}" data-on-change="{{setPattern}}" class="page-full-height gmail-style-31">
+              <div class="gmail-style-25">ใช้จับคู่อีเมลกับโครงงาน เช่น CS-01</div>
+            </div>
+          </div>
+
+          <div class="gmail-style-32">
+            <div class="responsive-small-control gmail-style-33">
+              <label for="int" class="gmail-style-30">ตรวจอีเมลใหม่ทุก</label>
+              <select id="int" value="{{interval}}" data-on-change="{{setInterval2}}" class="page-full-height gmail-style-34">
+                <option value="5">5 นาที</option><option value="15">15 นาที</option><option value="30">30 นาที</option><option value="60">1 ชั่วโมง</option>
+              </select>
+            </div>
+            <button type="button" data-on-click="{{toggleSender}}" aria-pressed="{{senderOnly}}" style="background:{{senderBg}};color:{{senderFg}}" class="page-full-height gmail-style-35">{{senderLabel}}</button>
+          </div>
+
+          <div class="gmail-style-36">
+            <div class="gmail-style-37">ตัวอย่างผลลัพธ์</div>
+            <div class="gmail-style-38">ตามเงื่อนไขนี้ มีอีเมลที่จะนำเข้า {{previewCount}} ฉบับในช่วง 7 วันที่ผ่านมา</div>
+          </div>
+
+          <div class="gmail-style-39">
+            <button type="button" data-on-click="{{save}}" class="page-full-height gmail-style-40">บันทึกการตั้งค่า</button>
+            <span role="status" class="gmail-style-41">{{saved}}</span>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

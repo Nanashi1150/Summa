@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="th"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ผู้ใช้และสิทธิ์ | Summa</title>
+  <link rel="stylesheet" href="assets/styles/fonts.css">
+  <link rel="stylesheet" href="assets/styles/shared.css">
+  <link rel="stylesheet" href="assets/styles/users.css">
+  <script defer="" src="assets/services/auth-policy.js"></script>
+  <script defer="" src="assets/components/confirm-dialog.js"></script>
+  <script defer="" src="assets/components/navbar.js"></script>
+  <script defer="" src="assets/js/app.js"></script>
+  <script defer="" src="assets/services/firebase.bundle.js"></script>
+  <script defer="" src="assets/js/users.js"></script>
+</head>
+<body data-page="users" data-role="admin" data-auth="pending"><div id="navbar-root"></div><div id="auth-status" class="page-feedback form-alert" role="alert" hidden=""></div><main id="main-content" tabindex="-1"><div id="page-root"></div></main><template id="page-template"><template data-if="loading"><p class="page-feedback" role="status">กำลังโหลดบัญชีผู้ใช้จาก Firebase…</p></template><template data-if="hasError"><p class="page-feedback form-alert" role="alert">{{error}}</p></template>
+
+<div class="page-full-height users-style-1">
+
+  <div class="responsive-page-padding users-style-2">
+    <div class="users-style-3">
+      <div class="users-style-4">
+        <h1 class="users-style-5">ผู้ใช้และสิทธิ์</h1>
+        <p class="users-style-6">เรียงตามคณะ › สาขา › ชื่อ-นามสกุล · ตัวอย่างข้อมูล</p>
+      </div>
+      <button type="button" class="page-full-height users-style-7">เพิ่มผู้ใช้</button>
+    </div>
+
+    <div class="users-style-8">
+      <template data-each="tabs" data-as="t">
+        <button type="button" data-on-click="{{t.pick}}" aria-pressed="{{t.on}}" style="background:{{t.bg}};color:{{t.fg}}" class="page-full-height users-style-9">{{t.label}} {{t.count}}</button>
+      </template>
+    </div>
+
+    <div class="users-style-10">
+      <div class="users-style-11">
+        <div class="users-style-12">
+          <div class="users-style-13">ชื่อและอีเมล</div><div class="users-style-14">บทบาท</div><div class="users-style-15">สถานะ</div><div class="users-style-16"></div>
+        </div>
+        <template data-each="rows" data-as="r">
+          <template data-if="r.isHead">
+            <div class="users-style-17">{{r.label}}</div>
+          </template>
+          <template data-if="r.isRow">
+            <div class="users-style-18">
+              <div class="users-style-19"><div class="users-style-20">{{r.name}}</div><div class="users-style-21">{{r.email}}</div></div>
+              <div class="users-style-14">
+                <select aria-label="บทบาทของ {{r.name}}" value="{{r.role}}" data-on-change="{{r.setRole}}" disabled="{{r.self}}" class="page-full-height users-style-22">
+                  <option value="student">นักศึกษา</option><option value="advisor">อาจารย์ที่ปรึกษา</option><option value="admin" disabled="">ผู้ดูแลระบบ</option>
+                </select>
+              </div>
+              <div class="users-style-15"><span style="background:{{r.sbg}};color:{{r.sfg}}" class="users-style-23">{{r.statusLabel}}</span></div>
+              <div class="users-style-24">
+                <template data-if="r.canOk"><button type="button" data-on-click="{{r.activate}}" class="page-full-height users-style-25">{{r.okLabel}}</button></template>
+                <template data-if="r.canStop"><button type="button" data-on-click="{{r.suspend}}" class="page-full-height users-style-26">{{r.stopLabel}}</button></template>
+              </div>
+            </div>
+          </template>
+        </template>
+      </div>
+    </div>
+    <p class="users-style-27">ผู้ดูแลระบบจัดการบัญชีและสิทธิ์เท่านั้น ไม่มีสิทธิ์อนุมัติผลสรุปทางวิชาการแทนอาจารย์ที่ปรึกษา ทุกการเปลี่ยนแปลงถูกบันทึกใน Log การใช้งาน</p>
+  </div>
+</div>
+</template><noscript><p>กรุณาเปิด JavaScript เพื่อใช้งานหน้านี้</p></noscript><footer class="site-footer">Summa · บัญชีผู้ใช้เชื่อมต่อ Firebase · ข้อมูลโครงงานและการเชื่อมต่ออื่นเป็นตัวอย่าง</footer>
+</body></html>

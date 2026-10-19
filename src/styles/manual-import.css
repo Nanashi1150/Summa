@@ -1,0 +1,344 @@
+body {
+  margin: 0;
+  background: #F4F6F8;
+}
+a {
+  color: #101A2E;
+}
+a:hover {
+  color: #176B4D;
+}
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+#pick:focus-visible + label {
+  outline: 3px solid #2F5BFF;
+  outline-offset: 2px;
+}
+.manual-import-style-1 {
+  min-height: 1500px;
+  background: #F4F6F8;
+  color: #101A2E;
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.manual-import-style-2 {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 36px 40px 64px;
+  box-sizing: border-box;
+}
+.manual-import-style-3 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.manual-import-style-4 {
+  margin: 6px 0 28px;
+  color: #2B374D;
+  max-width: 44em;
+}
+.manual-import-style-5 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-start;
+}
+.manual-import-style-6 {
+  flex: 1 1 460px;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  padding: 28px;
+}
+.manual-import-style-7 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+.manual-import-style-8 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+.manual-import-style-9 {
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.manual-import-style-10 {
+  margin-top: 20px;
+  padding: 36px 24px;
+  border: 1px dashed #8895A8;
+  border-radius: 8px;
+  color: #2B374D;
+  text-align: center;
+}
+.manual-import-style-11 {
+  font-size: 14px;
+  color: #566275;
+}
+.manual-import-style-12 {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.manual-import-style-13 {
+  font-weight: 500;
+}
+.manual-import-style-14 {
+  height: 44px;
+  border-radius: 6px;
+  background: #E6ECF3;
+}
+.manual-import-style-15 {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+}
+.manual-import-style-16 {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 20px;
+}
+.manual-import-style-17 {
+  min-width: 0;
+}
+.manual-import-style-18 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.manual-import-style-19 {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 8px;
+  border-radius: 999px;
+}
+.manual-import-style-20 {
+  font: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 46px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #fff;
+  color: #101A2E;
+}
+.manual-import-style-21 {
+  font: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 46px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #fff;
+  color: #101A2E;
+}
+.manual-import-style-22 {
+  font: inherit;
+  font-family: "Noto Serif Thai", serif;
+  line-height: 1.8;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #fff;
+  color: #101A2E;
+  resize: vertical;
+}
+.manual-import-style-23 {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #8A4B00;
+}
+.manual-import-style-24 {
+  margin-top: 20px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #F6DDDD;
+  color: #8A1F1F;
+  font-weight: 500;
+}
+.manual-import-style-25 {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+button.manual-import-style-26 {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 48px;
+  padding: 10px 26px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #FFE066;
+  color: #101A2E;
+}
+button.manual-import-style-27 {
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 48px;
+  padding: 10px 22px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #fff;
+  color: #101A2E;
+}
+.manual-import-style-28 {
+  margin-top: 20px;
+}
+.manual-import-style-29 {
+  font-size: 20px;
+  font-weight: 600;
+}
+.manual-import-style-30 {
+  margin: 8px 0 0;
+  color: #2B374D;
+}
+.manual-import-style-31 {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.manual-import-style-32 {
+  text-decoration: none;
+  font-weight: 600;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 10px 24px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #101A2E;
+  color: #fff;
+}
+button.manual-import-style-33 {
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 44px;
+  padding: 8px 22px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #fff;
+  color: #101A2E;
+}
+.manual-import-style-34 {
+  flex: 1.05 1 480px;
+  min-width: 0;
+}
+.manual-import-style-35 {
+  background: #fff;
+  border: 1px solid #D3DAE3;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.manual-import-style-36 {
+  padding: 14px 24px;
+  border-bottom: 1px solid #D3DAE3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: space-between;
+  align-items: center;
+}
+.manual-import-style-37 {
+  font-weight: 600;
+}
+button.manual-import-style-38 {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  min-height: 40px;
+  padding: 4px 16px;
+  border-radius: 6px;
+  border: 1.5px solid #101A2E;
+  background: #fff;
+  color: #101A2E;
+}
+.manual-import-style-39 {
+  padding: 28px;
+}
+.manual-import-style-40 {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.manual-import-style-41 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 420px;
+  box-sizing: border-box;
+  padding: 24px;
+  border: 2px dashed #8895A8;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  background: #F4F6F8;
+}
+.manual-import-style-42 {
+  font-weight: 600;
+  font-size: 18px;
+}
+.manual-import-style-43 {
+  color: #2B374D;
+  max-width: 24em;
+  font-size: 15px;
+}
+.manual-import-style-44 {
+  margin-top: 16px;
+  text-align: center;
+}
+.manual-import-style-45 {
+  padding: 24px;
+  background: #E6ECF3;
+}
+.manual-import-style-46 {
+  display: block;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #D3DAE3;
+  font-family:
+    "Noto Serif Thai",
+    "IBM Plex Sans Thai",
+    sans-serif;
+}
+.manual-import-style-47 {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid #D3DAE3;
+}
+.manual-import-style-48 {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: #566275;
+}
