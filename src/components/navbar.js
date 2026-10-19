@@ -20,7 +20,7 @@
     document.addEventListener('click',event=>{if(!host.contains(event.target)){close();account.open=false;}});
     return {update(session){
       const active=session.user && session.profile?.status==='active';
-      const role=SummaPolicy.publicPages.includes(page)?'public':(session.profile?.role || document.body.dataset.role);
+      const role=SummaPolicy.publicPages.includes(page)?'public':(SummaPolicy.effectiveRole(session) || document.body.dataset.role);
       header.classList.toggle('is-admin',role==='admin');
       nav.replaceChildren();
       for(const [label,name] of menus[role] || menus.public){const link=document.createElement('a');link.textContent=label;link.href=href(name);if(name===page)link.setAttribute('aria-current','page');nav.append(link);}
@@ -28,6 +28,19 @@
       const panel=account.querySelector('.account-panel');panel.replaceChildren();
       const link=document.createElement('a');link.textContent=active?'พื้นที่ทำงานของฉัน':'เข้าสู่ระบบ';link.href=active?SummaPolicy.destination(session):'login.html';panel.append(link);
       if(active){
+        if(session.profile.role==='admin'){
+          const label=document.createElement('p');label.textContent='มุมมองของผู้ดูแล';panel.append(label);
+          for(const [value,title] of [['admin','ผู้ดูแลระบบ'],['advisor','อาจารย์ที่ปรึกษา'],['student','นักศึกษา']]){
+            const button=document.createElement('button');button.type='button';button.textContent=title;
+            button.setAttribute('aria-pressed',String(SummaPolicy.effectiveRole(session)===value));
+            button.addEventListener('click',async()=>{
+              const buttons=[...panel.querySelectorAll('button')];buttons.forEach(item=>item.disabled=true);
+              try{const next=await SummaAuth.selectRole(value);navigate(SummaPolicy.destination(next));}
+              catch(error){notify(SummaPolicy.errorMessage(error));buttons.forEach(item=>item.disabled=false);}
+            });
+            panel.append(button);
+          }
+        }
         const logout=document.createElement('button');logout.type='button';logout.textContent='ออกจากระบบ';
         logout.addEventListener('click',async()=>{logout.disabled=true;try{await SummaAuth.logout();navigate('login.html');}catch(error){notify(SummaPolicy.errorMessage(error));logout.disabled=false;}});
         panel.append(logout);

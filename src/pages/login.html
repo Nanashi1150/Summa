@@ -25,7 +25,15 @@
       <p class="login-description">ใช้บัญชีที่ได้รับอนุมัติแล้ว เพื่อเข้าสู่พื้นที่ทำงานตามสิทธิ์ของคุณ</p>
       <template data-if="hasError"><div class="form-alert" role="alert">{{error}}</div></template>
       <template data-if="hasNotice"><div class="form-notice" role="status">{{notice}}</div></template>
-      <form data-on-submit="{{submit}}" novalidate="">
+      <template data-if="showAdminRoleChoice"><section class="role-choice" aria-labelledby="role-choice-title">
+        <h2 id="role-choice-title">เลือกพื้นที่ทำงาน</h2>
+        <p class="field-hint">ยืนยันบัญชีผู้ดูแลแล้ว เลือกมุมมองที่ต้องการใช้ โดยบทบาทบัญชียังคงเป็นผู้ดูแลระบบ</p>
+        <button class="login-submit" type="button" data-on-click="{{chooseAdmin}}" disabled="{{busy}}">ผู้ดูแลระบบ</button>
+        <button class="guest-login" type="button" data-on-click="{{chooseAdvisor}}" disabled="{{busy}}">อาจารย์ที่ปรึกษา</button>
+        <button class="guest-login" type="button" data-on-click="{{chooseStudent}}" disabled="{{busy}}">นักศึกษา</button>
+        <button class="text-button" type="button" data-on-click="{{changeAccount}}" disabled="{{busy}}">เปลี่ยนบัญชี</button>
+      </section></template>
+      <template data-if="showLoginForm"><form data-on-submit="{{submit}}" novalidate="">
         <label for="email">อีเมล</label>
         <input id="email" name="email" type="email" autocomplete="username" required="" value="{{email}}" data-on-change="{{setEmail}}" placeholder="admin@summa.ac.th" aria-describedby="admin-email-hint" disabled="{{busy}}">
         <p id="admin-email-hint" class="field-hint">ตัวอย่างอีเมลผู้ดูแล: admin@summa.ac.th — ใช้อีเมลบัญชีจริงของคุณ</p>
@@ -39,6 +47,7 @@
       <p id="guest-mode-hint" class="field-hint guest-mode-hint">ดูข้อมูลทั่วไปได้โดยไม่เข้าสู่ระบบ ไม่สามารถแก้ไขข้อมูลหรือดำเนินการกับระบบได้</p>
       <p class="login-register">ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
       <p class="field-hint login-admin-note">สิทธิ์ผู้ดูแลระบบกำหนดโดยเจ้าของระบบเท่านั้น</p>
+      </template>
       <a class="back-home" href="index.html">← กลับหน้าแรก</a>
     </div>
   </section>

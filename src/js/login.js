@@ -2,7 +2,12 @@
 Summa.register('login', PageLogic => class LoginPage extends PageLogic {
   constructor(props) {
     super(props);
-    this.state={email:'',password:'',error:'',notice:'',busy:false,guestBusy:false};
+    this.state={email:'',password:'',error:'',notice:'',busy:false,guestBusy:false,adminChoice:false};
+  }
+  complete(session) {
+    this.state.password='';
+    if(session.user && session.profile?.role==='admin' && session.profile.status==='active')this.setState({adminChoice:true});
+    else Summa.navigate(SummaPolicy.destination(session));
   }
   async perform(action) {
     if(this.state.busy)return;
@@ -17,6 +22,11 @@ Summa.register('login', PageLogic => class LoginPage extends PageLogic {
     const state=this.state;
     return {
       ...state,hasError:!!state.error,hasNotice:!!state.notice,
+      showLoginForm:!state.adminChoice,showAdminRoleChoice:state.adminChoice,
+      chooseAdmin:()=>this.perform(async()=>Summa.navigate(SummaPolicy.destination(await SummaAuth.selectRole('admin')))),
+      chooseAdvisor:()=>this.perform(async()=>Summa.navigate(SummaPolicy.destination(await SummaAuth.selectRole('advisor')))),
+      chooseStudent:()=>this.perform(async()=>Summa.navigate(SummaPolicy.destination(await SummaAuth.selectRole('student')))),
+      changeAccount:()=>this.perform(async()=>{await SummaAuth.logout();this.setState({adminChoice:false});}),
       loginLabel:state.busy&&!state.guestBusy?'กำลังเข้าสู่ระบบ…':'เข้าสู่ระบบ',
       guestLabel:state.guestBusy?'กำลังเปิดโหมดผู้เยี่ยมชม…':'เข้าใช้งานในโหมดผู้เยี่ยมชม',
       setEmail:event=>this.setState({email:event.target.value}),
@@ -27,13 +37,12 @@ Summa.register('login', PageLogic => class LoginPage extends PageLogic {
         if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())){this.setState({error:'รูปแบบอีเมลไม่ถูกต้อง'});return;}
         return this.perform(async()=>{
           const session=await SummaAuth.login(email,password);
-          this.state.password='';
-          Summa.navigate(SummaPolicy.destination(session));
+          this.complete(session);
         });
       },
       googleLogin:()=>this.perform(async()=>{
         const session=await SummaAuth.googleLogin();
-        Summa.navigate(SummaPolicy.destination(session));
+        this.complete(session);
       }),
       enterGuest:async()=>{
         if(this.state.busy)return;

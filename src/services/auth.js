@@ -4,7 +4,7 @@ import {doc,getDocFromServer,setDoc,serverTimestamp,onSnapshot} from 'firebase/f
 import {auth,db,initialized} from './firebase.js';
 import {coded,timeout} from './helpers.js';
 
-let state={ready:false,user:null,profile:null,error:null};
+let state={ready:false,user:null,profile:null,viewRole:null,error:null};
 let resolveReady;
 let profileSubscription;
 let generation=0;
@@ -17,7 +17,20 @@ function emit(next) {
   window.dispatchEvent(new CustomEvent('summa:auth',{detail:state}));
 }
 function clearPageState() {
-  try{for(const key of Object.keys(sessionStorage))if(/^summa:v[12]:/.test(key))sessionStorage.removeItem(key);}catch{/* Storage can be disabled. */}
+  try{for(const key of Object.keys(sessionStorage))if(/^summa:(v[12]:|view-role:)/.test(key))sessionStorage.removeItem(key);}catch{/* Storage can be disabled. */}
+}
+function storedRole(user,profile) {
+  if(profile?.role!=='admin' || profile.status!=='active')return null;
+  try{const role=sessionStorage.getItem('summa:view-role:'+user.uid);return ['admin','advisor','student'].includes(role)?role:'admin';}catch{return 'admin';}
+}
+export async function selectRole(role) {
+  const user=auth.currentUser;
+  if(!user || !['admin','advisor','student'].includes(role))throw coded('summa/not-authorized');
+  const profile=validProfile(await readProfile(user));
+  if(auth.currentUser?.uid!==user.uid || profile.role!=='admin')throw coded('summa/not-authorized');
+  try{sessionStorage.setItem('summa:view-role:'+user.uid,role);}catch{/* Keep the choice for this page when storage is unavailable. */}
+  emit({ready:true,user,profile,viewRole:role,error:null});
+  return state;
 }
 export function validProfile(profile) {
   if(!profile || !['student','advisor','admin'].includes(profile.role))throw coded('summa/profile-missing');
@@ -31,8 +44,10 @@ export async function readProfile(user) {
 async function completeLogin(credential) {
   try{
     const profile=validProfile(await readProfile(credential.user));
-    emit({ready:true,user:credential.user,profile,error:null});
-    return {ready:true,user:credential.user,profile};
+    const viewRole=profile.role==='admin'?'admin':null;
+    try{sessionStorage.removeItem('summa:view-role:'+credential.user.uid);}catch{/* Storage can be disabled. */}
+    emit({ready:true,user:credential.user,profile,viewRole,error:null});
+    return {ready:true,user:credential.user,profile,viewRole};
   }catch(error){await signOut(auth);throw error;}
 }
 export async function login(email,password) {
@@ -70,14 +85,17 @@ initialized.then(()=>{
   onAuthStateChanged(auth,async user=>{
     const current=++generation;
     profileSubscription?.();profileSubscription=null;
-    if(!user){clearPageState();emit({ready:true,user:null,profile:null,error:null});return;}
-    emit({ready:false,user,profile:null,error:null});
+    if(!user){clearPageState();emit({ready:true,user:null,profile:null,viewRole:null,error:null});return;}
+    emit({ready:false,user,profile:null,viewRole:null,error:null});
     try{
       const profile=await readProfile(user);
       if(current!==generation)return;
-      emit({ready:true,user,profile,error:null});
+      emit({ready:true,user,profile,viewRole:storedRole(user,profile),error:null});
       profileSubscription=onSnapshot(doc(db,'users',user.uid),snapshot=>{
-        if(current===generation)emit({ready:true,user,profile:snapshot.exists()?snapshot.data():null,error:null});
+        if(current===generation){
+          const nextProfile=snapshot.exists()?snapshot.data():null;
+          emit({ready:true,user,profile:nextProfile,viewRole:storedRole(user,nextProfile),error:null});
+        }
       },error=>{if(current===generation)emit({ready:true,user,profile:null,error});});
     }catch(error){if(current===generation)emit({ready:true,user,profile:null,error});}
   },error=>emit({ready:true,user:null,profile:null,error}));

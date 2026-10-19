@@ -199,6 +199,7 @@ a:focus-visible {
 body[data-page=login] .site-footer {
   display: none;
 }
+.role-choice { display: grid; gap: 12px; }
 body[data-page=login] main {
   min-height: 100vh;
 }

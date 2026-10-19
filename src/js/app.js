@@ -133,14 +133,14 @@
     const template=document.getElementById('page-template');
     let mounted=null;
     let mountedIdentity=null;
-    const navigation=SummaNavbar.create({page,notify,navigate});
+    const navigation=SummaNavbar.create({page,notify,navigate:url=>Summa.navigate(url)});
     function refreshAccess() {
       const session=currentSession();
       navigation.update(session);
       const publicPage=SummaPolicy.publicPages.includes(page);
       const allowed=SummaPolicy.canAccess(page,session);
       document.body.dataset.auth=allowed?'allowed':(session.ready?'denied':'pending');
-      const identity=publicPage?'public':session.user?.uid+':'+session.profile?.role;
+      const identity=publicPage?'public':session.user?.uid+':'+session.profile?.role+':'+SummaPolicy.effectiveRole(session);
       if(allowed) {
         if(!mounted || identity!==mountedIdentity){mounted?.destroy();mounted=mount(root,template,document.body.dataset.controller || page);mountedIdentity=identity;}
         return;

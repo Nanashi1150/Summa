@@ -9,10 +9,14 @@
     navbar: ['advisor', 'admin'], 'project-tree': ['advisor', 'admin']
   };
   const home = {student: 'student.html', advisor: 'review.html', admin: 'users.html'};
-  function canAccess(page, state) {
-    return publicPages.includes(page) || Boolean(state?.ready && state.user && state.profile?.status === 'active' && access[page]?.includes(state.profile.role));
+  function effectiveRole(state) {
+    const role=state?.profile?.role;
+    return role==='admin' && state.profile.status==='active' && ['admin','advisor','student'].includes(state.viewRole) ? state.viewRole : role;
   }
-  function destination(state) { return state?.profile?.status === 'active' ? home[state.profile.role] || 'login.html' : 'login.html'; }
+  function canAccess(page, state) {
+    return publicPages.includes(page) || Boolean(state?.ready && state.user && state.profile?.status === 'active' && access[page]?.includes(effectiveRole(state)));
+  }
+  function destination(state) { return state?.ready && state.user && state.profile?.status === 'active' ? home[effectiveRole(state)] || 'login.html' : 'login.html'; }
   function errorMessage(error) {
     const messages = {
       'auth/invalid-credential': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
@@ -42,7 +46,7 @@
     };
     return messages[error?.code] || 'ดำเนินการไม่สำเร็จ กรุณาลองใหม่หรือติดต่อผู้ดูแลระบบ';
   }
-  const policy = Object.freeze({publicPages, access, canAccess, destination, errorMessage});
+  const policy = Object.freeze({publicPages, access, effectiveRole, canAccess, destination, errorMessage});
   root.SummaPolicy = policy;
   if (typeof module !== 'undefined') module.exports = policy;
 })(typeof window !== 'undefined' ? window : globalThis);
