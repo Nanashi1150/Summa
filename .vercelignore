@@ -1,0 +1,7 @@
+node_modules
+.local
+.npm-cache
+.firebase-emulators
+.firebase
+*-debug.log
+public

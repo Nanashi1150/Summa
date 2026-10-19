@@ -1,0 +1,25 @@
+{
+  "name": "summa",
+  "version": "1.0.0",
+  "description": "Summa standalone HTML pages",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.cjs && node scripts/bundle.cjs",
+    "build:vercel": "npm run build && node scripts/check-build.cjs",
+    "start": "npm run build && node scripts/serve.cjs",
+    "test": "node tests/run.cjs",
+    "test:rules": "node scripts/run-rules-tests.cjs"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.2",
+    "esbuild": "^0.28.2",
+    "firebase-tools": "^15.34.0",
+    "jsdom": "^29.1.1"
+  },
+  "dependencies": {
+    "firebase": "^12.4.0"
+  }
+}

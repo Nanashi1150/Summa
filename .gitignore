@@ -1,0 +1,11 @@
+node_modules/
+.local/
+.npm-cache/
+*-debug.log
+.firebase/
+.firebase-emulators/
+.vercel/
+public/
+.env
+.env.*
+!.env.example

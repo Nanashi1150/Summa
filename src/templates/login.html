@@ -1,0 +1,29 @@
+<div class="login-screen">
+  <section class="login-story" aria-label="Summa">
+    <a class="login-brand" href="index.html"><span class="brand-mark" aria-hidden="true">≡</span> Summa</a>
+    <div><p class="login-eyebrow">จากข้อเสนอแนะ สู่ความคืบหน้า</p><p class="login-quote">ข้อเสนอแนะของอาจารย์<br>ชัดเจนขึ้น <mark>ทุกครั้งที่พบกัน</mark></p><p>รวมงาน นัดหมาย และความคืบหน้าโครงงานไว้ในที่เดียว</p></div>
+    <p class="login-story-footer">ระบบสรุปข้อเสนอแนะและนัดหมายอาจารย์ที่ปรึกษาโครงงาน</p>
+  </section>
+  <section class="login-panel" aria-labelledby="login-title">
+    <div class="login-form-wrap">
+      <p class="login-eyebrow">ยินดีต้อนรับสู่ Summa</p>
+      <h1 id="login-title">เข้าสู่ระบบ</h1>
+      <p class="login-description">ใช้บัญชีที่ได้รับอนุมัติแล้ว เพื่อเข้าสู่พื้นที่ทำงานตามสิทธิ์ของคุณ</p>
+      <template data-if="hasError"><div class="form-alert" role="alert">{{error}}</div></template>
+      <template data-if="hasNotice"><div class="form-notice" role="status">{{notice}}</div></template>
+      <form data-on-submit="{{submit}}" novalidate>
+        <label for="email">อีเมล</label>
+        <input id="email" name="email" type="email" autocomplete="username" required value="{{email}}" data-on-change="{{setEmail}}" placeholder="admin@summa.ac.th" aria-describedby="admin-email-hint" disabled="{{busy}}">
+        <p id="admin-email-hint" class="field-hint">ตัวอย่างอีเมลผู้ดูแล: admin@summa.ac.th — ใช้อีเมลบัญชีจริงของคุณ</p>
+        <div class="password-label"><label for="pw">รหัสผ่าน</label><button class="text-button" type="button" data-on-click="{{resetPassword}}" disabled="{{busy}}">ลืมรหัสผ่าน?</button></div>
+        <input id="pw" name="password" type="password" autocomplete="current-password" required value="{{password}}" data-on-change="{{setPassword}}" disabled="{{busy}}">
+        <button class="login-submit" data-login-submit type="submit" disabled="{{busy}}">{{loginLabel}}</button>
+      </form>
+      <div class="login-divider"><span>หรือ</span></div>
+      <button class="google-login" type="button" data-on-click="{{googleLogin}}" disabled="{{busy}}"><span aria-hidden="true">G</span> เข้าสู่ระบบด้วย Google</button>
+      <p class="login-register">ยังไม่มีบัญชี? <a href="register.html">สมัครสมาชิก</a></p>
+      <p class="field-hint login-admin-note">สิทธิ์ผู้ดูแลระบบกำหนดโดยเจ้าของระบบเท่านั้น</p>
+      <a class="back-home" href="index.html">← กลับหน้าแรก</a>
+    </div>
+  </section>
+</div>

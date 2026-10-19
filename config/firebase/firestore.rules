@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.status == 'active';
+    }
+    function validUser(data) {
+      return data.keys().hasAll(['uid','email','name','fac','br','sid','role','status','createdAt'])
+        && data.keys().hasOnly(['uid','email','name','fac','br','sid','role','status','createdAt','updatedAt'])
+        && data.uid is string && data.email is string
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && data.fac is string && data.fac.size() <= 200
+        && data.br is string && data.br.size() <= 200
+        && data.sid is string && data.sid.size() <= 100
+        && data.role in ['student','advisor','admin']
+        && data.status in ['pending','active','suspended']
+        && data.createdAt is timestamp;
+    }
+    match /users/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      // Signing up requests access; it never grants active or administrator access.
+      allow create: if signedIn() && request.auth.uid == uid
+        && validUser(request.resource.data)
+        && request.resource.data.uid == uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role in ['student','advisor']
+        && request.resource.data.status == 'pending'
+        && request.resource.data.createdAt == request.time
+        && !request.resource.data.keys().hasAny(['updatedAt']);
+      // Web administrators manage ordinary accounts, never their own account or other admins.
+      allow update: if isAdmin() && request.auth.uid != uid
+        && resource.data.role != 'admin'
+        && validUser(request.resource.data)
+        && request.resource.data.role in ['student','advisor']
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role','status','updatedAt'])
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+    // Other collections remain closed until their real data flows and rules are implemented.
+    match /{document=**} { allow read, write: if false; }
+  }
+}
