@@ -35,8 +35,8 @@
       </section></template>
       <template data-if="showLoginForm"><form data-on-submit="{{submit}}" novalidate="">
         <label for="email">อีเมล</label>
-        <input id="email" name="email" type="email" autocomplete="username" required="" value="{{email}}" data-on-change="{{setEmail}}" placeholder="admin@summa.ac.th" aria-describedby="admin-email-hint" disabled="{{busy}}">
-        <p id="admin-email-hint" class="field-hint">ตัวอย่างอีเมลผู้ดูแล: admin@summa.ac.th — ใช้อีเมลบัญชีจริงของคุณ</p>
+        <input id="email" name="email" type="email" autocomplete="username" required="" value="{{email}}" data-on-change="{{setEmail}}" placeholder="Test@gmail.com" aria-describedby="admin-email-hint" disabled="{{busy}}">
+        <p id="admin-email-hint" class="field-hint">บัญชีทดสอบ North2520: Test@gmail.com — ต้องสร้างบัญชีและกำหนดสิทธิ์ใน Firebase ก่อนใช้งาน</p>
         <div class="password-label"><label for="pw">รหัสผ่าน</label><button class="text-button" type="button" data-on-click="{{resetPassword}}" disabled="{{busy}}">ลืมรหัสผ่าน?</button></div>
         <input id="pw" name="password" type="password" autocomplete="current-password" required="" value="{{password}}" data-on-change="{{setPassword}}" disabled="{{busy}}">
         <button class="login-submit" data-login-submit="" type="submit" disabled="{{busy}}">{{loginLabel}}</button>
